@@ -5,11 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.fire</groupId>
-        <artifactId>fire</artifactId>
+        <artifactId>firetms</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-
-    <artifactId>FireApplication</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -17,4 +15,29 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+
+    <artifactId>FireApplication</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.fire</groupId>
+            <artifactId>TruckManagementCore</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <environment>dev</environment>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <environment>prod</environment>
+            </properties>
+        </profile>
+    </profiles>
 </project>

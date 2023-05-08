@@ -2,17 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.fire</groupId>
-    <artifactId>TruckManagement</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <parent>
+        <groupId>com.fire</groupId>
+        <artifactId>GeolocationServiceManager</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
 
-    <packaging>pom</packaging>
-    <modules>
-        <module>TruckManagementApi</module>
-        <module>TruckManagementCore</module>
-    </modules>
+    <packaging>jar</packaging>
+
+    <artifactId>GeolocationServiceManagerCore</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

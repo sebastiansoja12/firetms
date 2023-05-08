@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS TRUCK (
+plate varchar(255) NOT NULL,
+brand varchar(255) NOT NULL,
+model varchar(255) DEFAULT NULL,
+weight BIGINT DEFAULT NULL,
+length BIGINT NOT NULL
+);
