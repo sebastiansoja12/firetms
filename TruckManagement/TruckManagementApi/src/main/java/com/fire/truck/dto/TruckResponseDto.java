@@ -4,11 +4,8 @@ import lombok.Data;
 
 @Data
 public class TruckResponseDto {
-    private String brand;
 
-    private String model;
+    private String vehicleReg;
 
-    private Double weight;
-
-    private Double length;
+    private boolean telemetryEnabled;
 }

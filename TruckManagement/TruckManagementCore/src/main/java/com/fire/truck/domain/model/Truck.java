@@ -4,11 +4,8 @@ import lombok.Data;
 
 @Data
 public class Truck {
-    private String brand;
 
-    private String model;
+    private String plate;
 
-    private Double weight;
-
-    private Double length;
+    private boolean telematicsEnabled;
 }

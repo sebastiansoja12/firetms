@@ -5,4 +5,7 @@ import lombok.Data;
 @Data
 public class TruckResponse {
 
+    private String vehicleReg;
+
+    private boolean telematicsEnabled;
 }

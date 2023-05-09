@@ -4,5 +4,7 @@ import lombok.Data;
 
 @Data
 public class TruckRequestDto {
+    private String vehicleReg;
 
+    private boolean telemetryEnabled;
 }

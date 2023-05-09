@@ -19,16 +19,6 @@ public class TruckEntity {
     @Column(unique = true)
     private String plate;
 
-    @Column(name = "brand", nullable = false)
-    private String brand;
-
-    @Column(name = "model", nullable = false)
-    private String model;
-
-    @Column(name = "weight", nullable = false)
-    private Double weight;
-
-    @Column(name = "length", nullable = false)
-    private Double length;
-
+    @Column(name = "telematics")
+    private boolean telematicsEnabled;
 }
