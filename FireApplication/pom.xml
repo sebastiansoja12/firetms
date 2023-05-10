@@ -24,6 +24,16 @@
             <artifactId>TruckManagementCore</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.fire</groupId>
+            <artifactId>GeolocationServiceManagerCore</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fire</groupId>
+            <artifactId>ReportGeneratorCore</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <profiles>

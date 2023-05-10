@@ -2,6 +2,7 @@ package com.fire.report.infrastructure.adapter.primary;
 
 import com.fire.report.domain.model.TruckPositionMessage;
 import com.fire.report.domain.port.primary.ReportLogPort;
+import com.fire.report.event.RouteLogBaseEvent;
 import com.fire.report.event.TruckPositionDetermineEvent;
 import com.fire.report.infrastructure.adapter.primary.mapper.EventMapper;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +26,13 @@ public class LogEventListener {
 
     @EventListener
     public void saveTruckPositionMessage(TruckPositionDetermineEvent event) {
+        logEvent(event);
         final TruckPositionMessage message = eventMapper.map(event.getTruckPositionMessage());
         reportLogPort.saveTruckPositionMessage(message);
+    }
 
+    private void logEvent(RouteLogBaseEvent event) {
+        log.info("Detected event " + event.getClass().getSimpleName() + " at " +
+                event.getLocalDateTime().format(FORMATTER));
     }
 }

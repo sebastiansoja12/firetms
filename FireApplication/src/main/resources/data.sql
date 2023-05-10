@@ -1,14 +1,12 @@
-INSERT INTO TRUCK (plate, brand, model, weight, length) VALUES ('SR1234', 'Skanska', 'KT1', '500', '100');
-INSERT INTO TRUCK (plate, brand, model, weight, length) VALUES ('SK1234', 'Skanska', 'KT1', '500', '100');
-INSERT INTO TRUCK (plate, brand, model, weight, length) VALUES ('PO1234', 'Skanska', 'KT1', '500', '100');
-INSERT INTO TRUCK (plate, brand, model, weight, length) VALUES ('KR1234', 'Skanska', 'KT1', '500', '100');
-INSERT INTO TRUCK (plate, brand, model, weight, length) VALUES ('SO1234', 'Skanska', 'KT1', '500', '100');
+INSERT INTO TRUCK (plate, telematics) VALUES ('SR1234', TRUE);
+INSERT INTO TRUCK (plate, telematics) VALUES ('SK1234', TRUE);
+INSERT INTO TRUCK (plate, telematics) VALUES ('PO1234', TRUE);
+INSERT INTO TRUCK (plate, telematics) VALUES ('KR1234', TRUE);
+INSERT INTO TRUCK (plate, telematics) VALUES ('SO1234', TRUE);
 
 
 
+INSERT INTO POSITION(id, vehicle_reg, country, longitude, latitude, time_stamp)
+VALUES (1, 'SR1234', 'Poland', '50.1097081', '18.4792279', '2023-05-09 12:34:56')
 
 
-
-### POSITIONS
-INSERT INTO POSITION (id, vehicle_reg, country, longitude, latitude, timestamp)
-VALUES (1, 'SO1234', 'Poland', '50.049571', '16.347122', '2023-09-05 20:12:00');

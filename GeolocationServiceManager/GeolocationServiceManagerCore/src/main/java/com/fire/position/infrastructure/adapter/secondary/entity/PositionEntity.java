@@ -19,7 +19,7 @@ public class PositionEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "vehicleReg", nullable = false)
+    @Column(name = "vehicle_reg", nullable = false)
     private String vehicleReg;
 
     @Column(name = "country", nullable = false)
@@ -31,7 +31,7 @@ public class PositionEntity {
     @Column(name = "latitude")
     private Double latitude;
 
-    @Column(name = "timestamp", nullable = false)
+    @Column(name = "time_stamp", nullable = false)
     private Instant timestamp;
 
 }

@@ -1,6 +1,7 @@
 package com.fire.truck.infrastructure.adapter.primary;
 
 import com.fire.truck.domain.model.Truck;
+import com.fire.truck.domain.model.TruckPositionResponse;
 import com.fire.truck.domain.model.TruckRequest;
 import com.fire.truck.domain.port.primary.TruckPort;
 import com.fire.truck.dto.TruckRequestDto;
@@ -43,9 +44,21 @@ public class TruckController {
     @MessageMapping("/{plate}")
     @SendTo("/position/{plate}")
     public ResponseEntity<?> getTruck(@PathVariable String plate) {
-        final Truck truck =  truckPort.getTruck(plate);
+        final Truck truck =  truckPort.getTruckByPlate(plate);
         final TruckResponseDto truckResponse = truckResponseMapper.map(truck);
         return ResponseEntity.status(HttpStatus.FOUND).body(truckResponse);
+    }
+
+    @GetMapping("/position/{plate}")
+    public ResponseEntity<?> getTrucksPosition(@PathVariable String plate) {
+        final TruckPositionResponse truckResponse = truckPort.getTruckWithPosition(plate);
+        return ResponseEntity.status(HttpStatus.FOUND).body(truckResponse);
+    }
+
+    @GetMapping("/report/{plate}")
+    public ResponseEntity<?> getTruckPositionWithReport(@PathVariable String plate) {
+        truckPort.getTruckPositionWithReport(plate);
+        return ResponseEntity.status(HttpStatus.FOUND).build();
     }
 
 }

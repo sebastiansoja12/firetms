@@ -7,5 +7,5 @@ import java.util.List;
 @Data
 public class Report {
 
-    private List<BorderCrossing> borderCrossingEvent;
+    private BorderCrossing borderCrossingEvent;
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<dataset>
+
+    <truck
+            plate = "SR1234"
+            telemetry_enabled="1"
+    />
+
+
+</dataset>

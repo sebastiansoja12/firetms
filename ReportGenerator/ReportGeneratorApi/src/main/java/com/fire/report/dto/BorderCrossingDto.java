@@ -11,5 +11,5 @@ public class BorderCrossingDto {
 
     private String vehicleReg;
 
-    private List<EventDto> event;
+    private EventDto events;
 }

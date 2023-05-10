@@ -1,8 +1,7 @@
 package com.fire.truck.domain.port.primary;
 
-import com.fire.truck.domain.exception.EmptyBrandException;
-import com.fire.truck.domain.exception.EmptyTruckRequestException;
 import com.fire.truck.domain.model.Truck;
+import com.fire.truck.domain.model.TruckPositionResponse;
 import com.fire.truck.domain.model.TruckRequest;
 import com.fire.truck.domain.service.TruckService;
 import lombok.AllArgsConstructor;
@@ -24,23 +23,21 @@ public class TruckPortImpl implements TruckPort {
     }
 
     @Override
-    public Truck getTruck(String plate) {
-        return truckService.getTruckByPlate(plate);
+    public TruckPositionResponse getTruckWithPosition(String plate) {
+        return truckService.getTruckWithPosition(plate);
+    }
+
+    @Override
+    public Truck getTruckByPlate(String plate) {
+        return truckService.getTruck(plate);
+    }
+
+    @Override
+    public void getTruckPositionWithReport(String plate) {
+        truckService.getTruckPositionWithReport(plate);
     }
 
     private boolean isNotNull(TruckRequest truckRequest) {
         return !Objects.isNull(truckRequest);
-    }
-
-    private void validateRequest(TruckRequest truckRequest) {
-        if (truckRequest == null) {
-            throw new EmptyTruckRequestException("Track request is null");
-        }
-        if (truckRequest.getBrand() == null) {
-            throw new EmptyBrandException("Brand is null");
-        }
-        if (truckRequest.getModel() == null) {
-            throw new EmptyTruckRequestException("Model is null");
-        }
     }
 }

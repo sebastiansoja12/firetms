@@ -9,5 +9,5 @@ public class BorderCrossing {
 
     private String vehicleReg;
 
-    private List<Event> events;
+    private Event events;
 }

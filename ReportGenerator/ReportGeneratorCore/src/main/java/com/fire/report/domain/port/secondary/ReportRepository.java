@@ -1,7 +1,7 @@
 package com.fire.report.domain.port.secondary;
 
-import com.fire.report.domain.model.TruckPositionMessage;
+import com.fire.report.domain.model.Report;
 
 public interface ReportRepository {
-    void saveReport(TruckPositionMessage truckPositionMessage);
+    void saveReport(Report report);
 }

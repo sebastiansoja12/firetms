@@ -7,5 +7,5 @@ public class TruckResponseDto {
 
     private String vehicleReg;
 
-    private boolean telemetryEnabled;
+    private boolean telematicsEnabled;
 }

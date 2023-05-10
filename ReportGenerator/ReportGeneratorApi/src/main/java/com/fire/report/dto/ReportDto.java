@@ -8,5 +8,5 @@ import java.util.List;
 @Data
 @Builder
 public class ReportDto {
-    private List<BorderCrossingDto> borderCrossingEvent;
+    private BorderCrossingDto borderCrossingEvent;
 }
