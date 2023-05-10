@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface BorderCrossReadRepository extends JpaRepository<BorderCrossEntity, String> {
+public interface BorderCrossReadRepository extends JpaRepository<BorderCrossEntity, UUID> {
     Optional<BorderCrossEntity> findByVehicleReg(String vehicleReg);
 
     List<BorderCrossEntity> findAllByVehicleReg(String vehicleReg);

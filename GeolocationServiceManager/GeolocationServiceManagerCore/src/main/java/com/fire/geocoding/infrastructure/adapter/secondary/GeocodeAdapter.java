@@ -22,7 +22,7 @@ public class GeocodeAdapter implements GeocodeServicePort {
 
     private final String DATA = "data";
 
-    private final String COUNTRY = "country";
+    private final String COUNTRY_CODE = "country_code";
 
 
     @Override
@@ -37,7 +37,7 @@ public class GeocodeAdapter implements GeocodeServicePort {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return jsonNode.get(DATA).get(0).get(COUNTRY).asText();
+        return jsonNode.get(DATA).get(0).get(COUNTRY_CODE).asText();
     }
 
     private JsonNode result(URL url) throws IOException {

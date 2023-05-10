@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,7 +28,7 @@ public class EventEntity {
     private String countryIn;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(columnDefinition = "vehicle_reg", referencedColumnName = "vehicle_reg")
+    @JoinColumn(name = "border_cross_id")
     private BorderCrossEntity borderCross;
 
 }

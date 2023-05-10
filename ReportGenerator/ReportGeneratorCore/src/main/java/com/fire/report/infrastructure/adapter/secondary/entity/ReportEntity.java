@@ -19,8 +19,8 @@ public class ReportEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(columnDefinition = "border_cross_vehicle_reg", referencedColumnName = "vehicle_reg")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "border_cross_id")
     private BorderCrossEntity borderCross;
 
 }

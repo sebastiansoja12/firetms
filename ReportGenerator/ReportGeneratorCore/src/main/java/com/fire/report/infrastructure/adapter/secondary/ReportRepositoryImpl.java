@@ -26,16 +26,6 @@ public class ReportRepositoryImpl implements ReportRepository {
     @Override
     public void saveReport(Report report) {
         final ReportEntity reportEntity = reportModelMapper.map(report);
-        final List<EventEntity> eventEntities = reportModelMapper.mapToEventEntity(report.getBorderCrossingEvent().getEvents());
-        final BorderCrossEntity borderCrossEntity = reportModelMapper.map(report.getBorderCrossingEvent());
-        borderCrossReadRepository.save(borderCrossEntity);
-        eventEntities.forEach(
-                eventEntity -> {
-                    eventEntity.setBorderCross(borderCrossEntity);
-                }
-        );
-        eventReadRepository.saveAll(eventEntities);
-        reportEntity.setBorderCross(borderCrossEntity);
         reportReadRepository.save(reportEntity);
     }
 

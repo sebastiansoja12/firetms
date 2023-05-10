@@ -24,6 +24,10 @@ public class LogEventListener {
     private final ReportLogPort reportLogPort;
 
 
+    // TODO trzeba zrobic tak, ze jak jest wiecej niz jedna pozycja i masz np. liste tych pozycji i jezeli w pozycji(0)
+    // bylo country np. POL a w nastepnej juz jest GER albo cos innego to wtedy jest ten event ze przekroczylo sie granice
+    // i mozna wygenerowac wtedy ten raport, ale nie wiem czy zapisywac go w bazie
+
     @EventListener
     public void saveTruckPositionMessage(TruckPositionDetermineEvent event) {
         logEvent(event);

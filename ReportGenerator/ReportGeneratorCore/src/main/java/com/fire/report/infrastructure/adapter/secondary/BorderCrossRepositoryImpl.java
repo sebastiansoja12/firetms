@@ -15,6 +15,6 @@ public class BorderCrossRepositoryImpl implements BorderCrossRepository {
     @Override
     public void save(BorderCrossing borderCrossing) {
         final BorderCrossEntity borderCrossEntity = borderModelMapper.map(borderCrossing);
-        borderCrossReadRepository.saveAndFlush(borderCrossEntity);
+        borderCrossReadRepository.save(borderCrossEntity);
     }
 }

@@ -32,6 +32,11 @@ public class PositionAdapter implements PositionServicePort {
     private final GeocodingService geocodeService;
 
 
+    // TODO tutaj to trzeba przerobić, te serwisy juz sa tutaj wykorzystywane. Trzeba zrobić tak, że jak pozycja 0 jest
+    // np. z polski a następna już nie to wtedy powinien być stworzony ten EVentDto i trzeba pobrać mu te kraje ktore były
+    // tutaj mozliwe ze trzeba bedzie przekazac z bazy wczesniej pobrane wartosci, chcoiaz tutaj tez mozna sie odwolac do bazy idk
+    // ale jakos tak i wtedy bedzie mozna ten raport wygenerowac i nawet go zapisac wiec zostanie kwestia ustawienia postgres i
+    // tych propertiesow zeby sie podmieniło
     @Override
     public void determineVehiclePosition(Truck truck, Position position) {
         // event

@@ -13,6 +13,4 @@ import java.util.Optional;
 public interface EventReadRepository extends JpaRepository<EventEntity, Long> {
     Optional<EventEntity> findById(Long id);
 
-    @Query("SELECT e FROM EventEntity e JOIN e.borderCross b WHERE b.vehicleReg = :vehicleReg")
-    List<EventEntity> findAllByVehicleReg(@Param("vehicleReg") String vehicleReg);
 }
