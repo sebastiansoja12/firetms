@@ -7,12 +7,14 @@ import com.fire.report.infrastructure.adapter.secondary.entity.BorderCrossEntity
 import com.fire.report.infrastructure.adapter.secondary.entity.EventEntity;
 import com.fire.report.infrastructure.adapter.secondary.entity.ReportEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
 @Mapper
 public interface ReportModelMapper {
 
+    @Mapping(target = "borderCross", source = "borderCrossingEvent")
     ReportEntity map(Report report);
 
     EventEntity map(Event event);
@@ -22,5 +24,8 @@ public interface ReportModelMapper {
     BorderCrossEntity map(BorderCrossing borderCrossing);
 
     List<BorderCrossEntity> mapToBorderCrossEntity(List<BorderCrossing> borderCrossings);
+
+    @Mapping(source = "borderCross", target = "borderCrossingEvent")
+    Report map(ReportEntity report);
 
 }

@@ -12,10 +12,16 @@ CREATE TABLE IF NOT EXISTS POSITION (
  time_stamp varchar(255) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS BORDER_CROSS (
+vehicle_reg varchar(255) not null,
+primary key (vehicle_reg)
+);
+
 CREATE TABLE IF NOT EXISTS REPORT (
 id varchar(255) not null,
-border_cross_id varchar(255),
-primary key (id)
+border_cross_vehicle_reg varchar(255) not null,
+primary key (border_cross_vehicle_reg),
+foreign key (border_cross_vehicle_reg) references BORDER_CROSS (vehicle_reg)
 );
 
 CREATE TABLE IF NOT EXISTS EVENT (
@@ -23,12 +29,6 @@ id bigint not null auto_increment,
 event_time_stamp time not null,
 country_out varchar(255),
 country_in varchar(255),
-primary key (id)
-);
-
-CREATE TABLE IF NOT EXISTS BORDER_CROSS (
-id varchar(255) not null,
-vehicle_reg varchar(255) not null,
-event_id bigint,
-primary key (id)
+border_cross_vehicle_reg varchar(255) not null,
+foreign key (border_cross_vehicle_reg) references BORDER_CROSS (vehicle_reg)
 );

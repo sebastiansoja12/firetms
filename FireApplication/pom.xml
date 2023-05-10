@@ -34,6 +34,11 @@
             <artifactId>ReportGeneratorCore</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.fire</groupId>
+            <artifactId>TokenStage</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <profiles>

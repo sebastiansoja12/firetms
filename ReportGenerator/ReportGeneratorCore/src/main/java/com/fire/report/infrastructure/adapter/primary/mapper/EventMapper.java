@@ -9,14 +9,17 @@ import com.fire.report.dto.EventDto;
 import com.fire.report.dto.ReportDto;
 import com.fire.report.dto.TruckPositionMessageDto;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
 @Mapper
 public interface EventMapper {
 
+    @Mapping(source = "report.borderCrossing", target = "report.borderCrossingEvent")
     TruckPositionMessage map(TruckPositionMessageDto truckPositionMessage);
 
+    @Mapping(source = "borderCrossing", target = "borderCrossingEvent")
     Report map(ReportDto report);
 
     BorderCrossing map(BorderCrossingDto borderCrossing);

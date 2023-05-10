@@ -1,11 +1,12 @@
 package com.fire.report.infrastructure.adapter.secondary.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,12 +16,6 @@ import java.util.UUID;
 public class BorderCrossEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
     @Column(name = "vehicle_reg", nullable = false)
     private String vehicleReg;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(columnDefinition = "event_id", referencedColumnName = "id")
-    private EventEntity event;
 }

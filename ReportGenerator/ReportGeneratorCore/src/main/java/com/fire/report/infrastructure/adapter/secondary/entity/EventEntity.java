@@ -28,4 +28,8 @@ public class EventEntity {
     @Column(name = "country_in", nullable = false)
     private String countryIn;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(columnDefinition = "vehicle_reg", referencedColumnName = "vehicle_reg")
+    private BorderCrossEntity borderCross;
+
 }

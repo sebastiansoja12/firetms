@@ -1,5 +1,7 @@
 package com.fire.report.configuration;
 
+import com.fire.report.domain.port.primary.ReportControllerPort;
+import com.fire.report.domain.port.primary.ReportControllerPortImpl;
 import com.fire.report.domain.port.primary.ReportLogPort;
 import com.fire.report.domain.port.primary.ReportLogPortImpl;
 import com.fire.report.domain.port.secondary.BorderCrossRepository;
@@ -50,5 +52,11 @@ public class ReportConfiguration {
     @Bean
     public EventMapper eventMapper() {
         return new EventMapperImpl();
+    }
+
+
+    @Bean
+    public ReportControllerPort reportControllerPort(ReportRepository reportRepository) {
+        return new ReportControllerPortImpl(reportRepository);
     }
 }

@@ -1,0 +1,23 @@
+package com.fire.report.infrastructure.adapter.primary.controller;
+
+import com.fire.report.domain.model.Report;
+import com.fire.report.domain.model.ReportResponse;
+import com.fire.report.domain.port.primary.ReportControllerPort;
+import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/reports")
+@AllArgsConstructor
+public class ReportController {
+
+    private final ReportControllerPort reportControllerPort;
+
+    @GetMapping("/{vehicleReg}")
+    public ReportResponse getReport(@PathVariable String vehicleReg) {
+        return reportControllerPort.downloadReportByVehiclePlate(vehicleReg);
+    }
+}

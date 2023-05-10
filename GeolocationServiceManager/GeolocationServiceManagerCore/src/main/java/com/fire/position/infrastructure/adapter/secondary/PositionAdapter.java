@@ -2,6 +2,9 @@ package com.fire.position.infrastructure.adapter.secondary;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fire.geocoding.GeocodingService;
+import com.fire.geocoding.dto.CoordinatesDto;
+import com.fire.geocoding.dto.CountryResponseDto;
 import com.fire.position.domain.model.Coordinate;
 import com.fire.position.domain.model.Position;
 import com.fire.position.domain.model.Truck;
@@ -17,7 +20,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -27,6 +29,7 @@ public class PositionAdapter implements PositionServicePort {
 
     private final static String POSITION_URL = "http://localhost:8081/vehicles/coordinates/";
 
+    private final GeocodingService geocodeService;
 
 
     @Override
@@ -34,17 +37,17 @@ public class PositionAdapter implements PositionServicePort {
         // event
         final BorderCrossingDto borderCrossing = BorderCrossingDto.builder()
                 .vehicleReg(truck.getPlate())
-                .events(EventDto.builder()
+                .events(List.of(EventDto.builder()
                         .eventTimeStamp(Instant.now())
                         .countryIn(position.getCountry())
                         .countryOut("Germany")
-                        .build())
+                        .build()))
                 .build();
 
         final TruckPositionMessageDto message = TruckPositionMessageDto.builder()
                 .raportTimeStamp(Instant.now())
                 .report(ReportDto.builder()
-                        .borderCrossingEvent(borderCrossing).build())
+                        .borderCrossing(borderCrossing).build())
                 .build();
 
         sendEvent(buildEvent(message));
@@ -67,9 +70,14 @@ public class PositionAdapter implements PositionServicePort {
                 .longitude(positionTransfer.getLongitude())
                 .build());
         position.setVehicleReg(truck.getPlate());
-        position.setCountry("Poland");
+        final CountryResponseDto countryResponse = geocodeService.determineCountry(coordinates(position.getCoordinate()));
+        position.setCountry(countryResponse.getCountry());
         position.setTimestamp(Instant.now().toString());
         return position;
+    }
+
+    private CoordinatesDto coordinates(Coordinate coordinate) {
+        return new CoordinatesDto(coordinate.getLongitude(), coordinate.getLatitude());
     }
 
     private TruckPositionDetermineEvent buildEvent(TruckPositionMessageDto message) {

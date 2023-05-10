@@ -1,5 +1,6 @@
 package com.fire.position.configuration;
 
+import com.fire.geocoding.GeocodingService;
 import com.fire.position.PositionService;
 import com.fire.position.domain.port.primary.PositionPort;
 import com.fire.position.domain.port.primary.PositionPortImpl;
@@ -33,8 +34,9 @@ public class PositionConfiguration {
     }
 
     @Bean
-    public PositionServicePort positionServicePort(LogEventPublisher logEventPublisher) {
-        return new PositionAdapter(logEventPublisher);
+    public PositionServicePort positionServicePort(LogEventPublisher logEventPublisher,
+        GeocodingService geocodingService) {
+        return new PositionAdapter(logEventPublisher, geocodingService);
     }
 
     @Bean
