@@ -24,7 +24,7 @@ public class TruckServiceImpl implements TruckService {
 
     @Override
     public TruckPositionResponse getTruckWithPosition(String plate) {
-        final Truck truck = new Truck(plate);
+        final Truck truck = truckRepository.findByPlate(plate);
         final List<Position> position = truckPositionServicePort.determinePosition(truck);
         return new TruckPositionResponse(plate, position);
     }

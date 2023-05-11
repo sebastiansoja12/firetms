@@ -56,7 +56,8 @@ public class ReportConfiguration {
 
 
     @Bean
-    public ReportControllerPort reportControllerPort(ReportRepository reportRepository) {
-        return new ReportControllerPortImpl(reportRepository);
+    public ReportControllerPort reportControllerPort(ReportRepository reportRepository,
+                                                     EventRepository eventRepository) {
+        return new ReportControllerPortImpl(reportRepository, eventRepository);
     }
 }

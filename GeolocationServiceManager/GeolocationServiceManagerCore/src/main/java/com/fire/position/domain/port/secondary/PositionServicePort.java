@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface PositionServicePort {
 
-    void determineVehiclePosition(Truck truck, Position position);
+    void determineVehiclePosition(Truck truck, List<Position> positions);
 
     Position determineVehiclePositions(Truck truck);
 }

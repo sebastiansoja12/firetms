@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.List;
 
 @Data
 @Builder
@@ -12,6 +13,6 @@ public class TruckPositionMessageDto {
 
     private Instant raportTimeStamp;
 
-    private ReportDto report;
+    private List<EventDto> events;
 
 }

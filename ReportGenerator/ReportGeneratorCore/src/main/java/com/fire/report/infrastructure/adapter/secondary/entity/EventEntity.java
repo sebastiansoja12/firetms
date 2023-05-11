@@ -27,8 +27,7 @@ public class EventEntity {
     @Column(name = "country_in", nullable = false)
     private String countryIn;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "border_cross_id")
-    private BorderCrossEntity borderCross;
+    @Column(name = "vehicle_reg", nullable = false)
+    private String vehicleReg;
 
 }

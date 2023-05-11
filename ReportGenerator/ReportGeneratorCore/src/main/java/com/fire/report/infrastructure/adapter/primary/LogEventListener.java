@@ -28,11 +28,14 @@ public class LogEventListener {
     // bylo country np. POL a w nastepnej juz jest GER albo cos innego to wtedy jest ten event ze przekroczylo sie granice
     // i mozna wygenerowac wtedy ten raport, ale nie wiem czy zapisywac go w bazie
 
+    // trzeba to przerobic, bo nie potrzebuje tego BorderCrossingEntity ani nawet ReportEntity bo tylko ten raport generujemy
+    // i do tego mozna przechowywac po prostu w evencie rejestracje pojazdu i tyle, bedzie prosciej. ten algorytm tam poprawic idowidzenia
+
     @EventListener
     public void saveTruckPositionMessage(TruckPositionDetermineEvent event) {
         logEvent(event);
         final TruckPositionMessage message = eventMapper.map(event.getTruckPositionMessage());
-        reportLogPort.saveTruckPositionMessage(message);
+        reportLogPort.saveTruckBorderCrossingInformation(message);
     }
 
     private void logEvent(RouteLogBaseEvent event) {

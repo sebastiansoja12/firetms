@@ -14,4 +14,6 @@ public class EventDto {
     private String countryOut;
 
     private String countryIn;
+
+    private String vehicleReg;
 }

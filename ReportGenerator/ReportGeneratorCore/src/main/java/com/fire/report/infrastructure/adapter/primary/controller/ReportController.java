@@ -1,6 +1,5 @@
 package com.fire.report.infrastructure.adapter.primary.controller;
 
-import com.fire.report.domain.model.Report;
 import com.fire.report.domain.model.ReportResponse;
 import com.fire.report.domain.port.primary.ReportControllerPort;
 import lombok.AllArgsConstructor;
@@ -19,5 +18,11 @@ public class ReportController {
     @GetMapping("/{vehicleReg}")
     public ReportResponse getReport(@PathVariable String vehicleReg) {
         return reportControllerPort.downloadReportByVehiclePlate(vehicleReg);
+    }
+
+    @GetMapping("/sorted/{vehicleReg}/{pageNumber}/{pageSize}")
+    public ReportResponse getReportSorted(@PathVariable String vehicleReg,
+                                          @PathVariable int pageNumber, @PathVariable int pageSize) {
+        return reportControllerPort.findByVehicleReg(vehicleReg, pageNumber, pageSize);
     }
 }

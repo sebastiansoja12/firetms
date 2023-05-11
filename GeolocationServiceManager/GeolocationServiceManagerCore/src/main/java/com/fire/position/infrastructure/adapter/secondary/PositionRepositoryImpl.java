@@ -41,4 +41,10 @@ public class PositionRepositoryImpl implements PositionRepository {
                 .map(positionModelMapper::map)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void savePosition(Position position) {
+        final PositionEntity positionEntity = positionModelMapper.map(position);
+        positionReadRepository.save(positionEntity);
+    }
 }

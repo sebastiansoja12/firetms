@@ -10,4 +10,6 @@ public interface PositionRepository {
     Position findPositionByPlate(String plate);
 
     List<Position> save(Position positions);
+
+    void savePosition(Position position);
 }

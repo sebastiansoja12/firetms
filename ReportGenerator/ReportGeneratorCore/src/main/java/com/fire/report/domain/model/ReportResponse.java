@@ -7,12 +7,12 @@ import java.time.Instant;
 @Data
 public class ReportResponse {
 
-    private Instant timeStamp;
+    private Instant raportTimeStamp;
 
     private Report report;
 
     public ReportResponse(Report report) {
         this.report = report;
-        this.timeStamp = Instant.now();
+        this.raportTimeStamp = Instant.now();
     }
 }

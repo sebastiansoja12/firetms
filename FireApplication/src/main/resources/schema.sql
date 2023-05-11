@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS EVENT
     event_time_stamp TIMESTAMP NOT NULL,
     country_out      VARCHAR(255),
     country_in       VARCHAR(255),
-    border_cross_id varchar(255),
+    vehicle_reg      VARCHAR(255),
     PRIMARY KEY (id)
 );
 
@@ -28,7 +28,6 @@ CREATE TABLE IF NOT EXISTS BORDER_CROSS
     id          VARCHAR(255) NOT NULL,
     vehicle_reg VARCHAR(255) NOT NULL,
     events_id      BIGINT,
-    border_cross_id bigint,
     PRIMARY KEY (id),
     FOREIGN KEY (events_id) REFERENCES EVENT (id)
 );

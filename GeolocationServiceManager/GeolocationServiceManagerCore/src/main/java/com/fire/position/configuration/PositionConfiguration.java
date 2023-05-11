@@ -35,8 +35,8 @@ public class PositionConfiguration {
 
     @Bean
     public PositionServicePort positionServicePort(LogEventPublisher logEventPublisher,
-        GeocodingService geocodingService) {
-        return new PositionAdapter(logEventPublisher, geocodingService);
+        GeocodingService geocodingService, PositionRepository positionRepository) {
+        return new PositionAdapter(logEventPublisher, geocodingService, positionRepository);
     }
 
     @Bean

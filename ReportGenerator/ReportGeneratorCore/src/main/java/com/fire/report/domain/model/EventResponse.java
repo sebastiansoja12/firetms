@@ -5,13 +5,10 @@ import lombok.Data;
 import java.time.Instant;
 
 @Data
-public class Event {
-
+public class EventResponse {
     private Instant eventTimeStamp;
 
     private String countryOut;
 
     private String countryIn;
-
-    private String vehicleReg;
 }

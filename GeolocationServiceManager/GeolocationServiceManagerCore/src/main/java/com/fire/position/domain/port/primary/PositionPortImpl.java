@@ -6,6 +6,7 @@ import com.fire.position.domain.port.secondary.PositionRepository;
 import com.fire.position.domain.port.secondary.PositionServicePort;
 import lombok.AllArgsConstructor;
 
+import java.time.Instant;
 import java.util.List;
 
 @AllArgsConstructor
@@ -23,7 +24,13 @@ public class PositionPortImpl implements PositionPort {
 
     @Override
     public void determineVehiclePositionWithReport(Truck truck) {
-        final Position position = positionRepository.findPositionByPlate(truck.getPlate());
-        positionServicePort.determineVehiclePosition(truck, position);
+        final List<Position> positions = positionRepository.findPositionsByPlate(truck.getPlate());
+        positionServicePort.determineVehiclePosition(truck, positions);
+    }
+
+    @Override
+    public void insertPosition(Position position) {
+        position.setTimestamp(Instant.now().toString());
+        positionRepository.savePosition(position);
     }
 }

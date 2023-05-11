@@ -1,5 +1,6 @@
 package com.fire.report.domain.port.primary;
 
+import com.fire.report.domain.exception.EventMissingException;
 import com.fire.report.domain.model.BorderCrossing;
 import com.fire.report.domain.model.Event;
 import com.fire.report.domain.model.Report;
@@ -11,6 +12,7 @@ import lombok.AllArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 public class ReportLogPortImpl implements ReportLogPort {
@@ -22,12 +24,8 @@ public class ReportLogPortImpl implements ReportLogPort {
     private final EventRepository eventRepository;
 
     @Override
-    public void saveTruckPositionMessage(TruckPositionMessage message) {
-        final Report report = extractReportFromMessage(message);
-        reportRepository.saveReport(report);
-    }
-
-    private Report extractReportFromMessage(TruckPositionMessage message) {
-        return message.getReport();
+    public void saveTruckBorderCrossingInformation(TruckPositionMessage message) {
+        final List<Event> events = message.getEvents();
+        eventRepository.save(events);
     }
 }

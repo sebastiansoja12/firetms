@@ -16,7 +16,6 @@ import java.util.List;
 @Mapper
 public interface EventMapper {
 
-    @Mapping(source = "report.borderCrossing", target = "report.borderCrossingEvent")
     TruckPositionMessage map(TruckPositionMessageDto truckPositionMessage);
 
     @Mapping(source = "borderCrossing", target = "borderCrossingEvent")

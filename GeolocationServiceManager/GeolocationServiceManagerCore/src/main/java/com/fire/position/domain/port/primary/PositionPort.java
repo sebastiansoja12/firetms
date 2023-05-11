@@ -10,4 +10,6 @@ public interface PositionPort {
     List<Position> determineVehiclePosition(Truck truck);
 
     void determineVehiclePositionWithReport(Truck truck);
+
+    void insertPosition(Position position);
 }

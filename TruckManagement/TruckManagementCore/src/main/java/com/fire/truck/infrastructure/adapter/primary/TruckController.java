@@ -41,8 +41,6 @@ public class TruckController {
     }
 
     @GetMapping("/{plate}")
-    @MessageMapping("/{plate}")
-    @SendTo("/position/{plate}")
     public ResponseEntity<?> getTruck(@PathVariable String plate) {
         final Truck truck =  truckPort.getTruckByPlate(plate);
         final TruckResponseDto truckResponse = truckResponseMapper.map(truck);

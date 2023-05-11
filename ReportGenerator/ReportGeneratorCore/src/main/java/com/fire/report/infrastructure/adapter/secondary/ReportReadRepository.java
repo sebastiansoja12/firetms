@@ -1,6 +1,8 @@
 package com.fire.report.infrastructure.adapter.secondary;
 
 import com.fire.report.infrastructure.adapter.secondary.entity.ReportEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

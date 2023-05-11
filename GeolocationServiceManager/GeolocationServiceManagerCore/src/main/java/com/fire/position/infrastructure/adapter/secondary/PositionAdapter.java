@@ -8,12 +8,12 @@ import com.fire.geocoding.dto.CountryResponseDto;
 import com.fire.position.domain.model.Coordinate;
 import com.fire.position.domain.model.Position;
 import com.fire.position.domain.model.Truck;
+import com.fire.position.domain.port.secondary.PositionRepository;
 import com.fire.position.domain.port.secondary.PositionServicePort;
 import com.fire.position.domain.vo.PositionTransfer;
 import com.fire.report.LogEventPublisher;
 import com.fire.report.dto.BorderCrossingDto;
 import com.fire.report.dto.EventDto;
-import com.fire.report.dto.ReportDto;
 import com.fire.report.dto.TruckPositionMessageDto;
 import com.fire.report.event.TruckPositionDetermineEvent;
 import lombok.AllArgsConstructor;
@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @AllArgsConstructor
 public class PositionAdapter implements PositionServicePort {
@@ -31,6 +32,7 @@ public class PositionAdapter implements PositionServicePort {
 
     private final GeocodingService geocodeService;
 
+    private final PositionRepository positionRepository;
 
     // TODO tutaj to trzeba przerobić, te serwisy juz sa tutaj wykorzystywane. Trzeba zrobić tak, że jak pozycja 0 jest
     // np. z polski a następna już nie to wtedy powinien być stworzony ten EVentDto i trzeba pobrać mu te kraje ktore były
@@ -38,21 +40,21 @@ public class PositionAdapter implements PositionServicePort {
     // ale jakos tak i wtedy bedzie mozna ten raport wygenerowac i nawet go zapisac wiec zostanie kwestia ustawienia postgres i
     // tych propertiesow zeby sie podmieniło
     @Override
-    public void determineVehiclePosition(Truck truck, Position position) {
+    public void determineVehiclePosition(Truck truck, List<Position> positions) {
         // event
-        final BorderCrossingDto borderCrossing = BorderCrossingDto.builder()
-                .vehicleReg(truck.getPlate())
-                .events(List.of(EventDto.builder()
-                        .eventTimeStamp(Instant.now())
-                        .countryIn(position.getCountry())
-                        .countryOut("Germany")
-                        .build()))
-                .build();
+        final List<EventDto> events = IntStream.range(1, positions.size())
+                    .filter(i -> !positions.get(i).getCountry().equals(positions.get(i-1).getCountry()))
+                    .mapToObj(i -> EventDto.builder()
+                            .eventTimeStamp(Instant.now())
+                            .countryIn(positions.get(i).getCountry())
+                            .countryOut(positions.get(i-1).getCountry())
+                            .vehicleReg(positions.get(i).getVehicleReg())
+                            .build())
+                    .toList();
 
         final TruckPositionMessageDto message = TruckPositionMessageDto.builder()
                 .raportTimeStamp(Instant.now())
-                .report(ReportDto.builder()
-                        .borderCrossing(borderCrossing).build())
+                .events(events)
                 .build();
 
         sendEvent(buildEvent(message));
@@ -69,20 +71,21 @@ public class PositionAdapter implements PositionServicePort {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        final Position position = new Position();
-        position.setCoordinate(Coordinate.builder()
-                .latitude(positionTransfer.getLatitude())
-                .longitude(positionTransfer.getLongitude())
-                .build());
-        position.setVehicleReg(truck.getPlate());
-        final CountryResponseDto countryResponse = geocodeService.determineCountry(coordinates(position.getCoordinate()));
-        position.setCountry(countryResponse.getCountry());
-        position.setTimestamp(Instant.now().toString());
-        return position;
+        final CountryResponseDto countryResponse = geocodeService.determineCountry(coordinates(positionTransfer));
+
+        return Position.builder()
+                .coordinate(Coordinate.builder()
+                        .latitude(positionTransfer.getLatitude())
+                        .longitude(positionTransfer.getLongitude())
+                        .build())
+                .vehicleReg(truck.getPlate())
+                .timestamp(Instant.now().toString())
+                .country(countryResponse.getCountry())
+                .build();
     }
 
-    private CoordinatesDto coordinates(Coordinate coordinate) {
-        return new CoordinatesDto(coordinate.getLongitude(), coordinate.getLatitude());
+    private CoordinatesDto coordinates(PositionTransfer positionTransfer) {
+        return new CoordinatesDto(positionTransfer.getLongitude(), positionTransfer.getLatitude());
     }
 
     private TruckPositionDetermineEvent buildEvent(TruckPositionMessageDto message) {

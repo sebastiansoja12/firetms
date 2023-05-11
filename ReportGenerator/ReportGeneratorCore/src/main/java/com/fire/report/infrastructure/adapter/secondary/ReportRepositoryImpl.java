@@ -2,14 +2,11 @@ package com.fire.report.infrastructure.adapter.secondary;
 
 import com.fire.report.domain.model.Report;
 import com.fire.report.domain.port.secondary.ReportRepository;
-import com.fire.report.infrastructure.adapter.secondary.entity.BorderCrossEntity;
-import com.fire.report.infrastructure.adapter.secondary.entity.EventEntity;
 import com.fire.report.infrastructure.adapter.secondary.entity.ReportEntity;
 import com.fire.report.infrastructure.adapter.secondary.exception.ReportNotFoundException;
 import com.fire.report.infrastructure.adapter.secondary.mapper.ReportModelMapper;
 import lombok.AllArgsConstructor;
 
-import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -29,12 +26,14 @@ public class ReportRepositoryImpl implements ReportRepository {
         reportReadRepository.save(reportEntity);
     }
 
+    // TODO albo mozna zrobic tak ze tylko bedzie ten EventEntity??? i on moze miec vehicleReg w sobie bo w sumie chyba musi miec
+    // i wtedy bedzie wiadomo kiedy skad wyjechal, a w bazie w position tez bedzie ta wartoisc i mozna by przy generowaniu raportu
+    // to jakos sklecic i zrobic obiekt ktory ma te borderCrossingEvent ale to nie bedzie encja tylko obiekt w ktory zapisze sie
+    // lista eventow
     @Override
     public Report findByVehicleReg(String vehicleReg) {
         final Optional<ReportEntity> report = reportReadRepository
-                .findByVehicleRegWithEvents(vehicleReg)
-                .stream()
-                .findFirst();
+                .findByVehicleRegWithEvents(vehicleReg);
 
         return report.map(reportModelMapper::map).orElseThrow(
                 () -> new ReportNotFoundException("Report for " + vehicleReg + " does not exist")
