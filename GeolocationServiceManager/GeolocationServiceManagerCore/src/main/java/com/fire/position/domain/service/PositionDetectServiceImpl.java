@@ -11,11 +11,8 @@ public class PositionDetectServiceImpl implements PositionDetectService {
 
     @Override
     public void detectBorderCrossing(Position position, Position newPosition) {
-        if (position.getVehicleReg().equals(newPosition.getVehicleReg())) {
             if (!position.getCountry().equals(newPosition.getCountry())) {
                 positionServicePort.createBorderCrossingEvent(position, newPosition);
             }
-        }
-
     }
 }

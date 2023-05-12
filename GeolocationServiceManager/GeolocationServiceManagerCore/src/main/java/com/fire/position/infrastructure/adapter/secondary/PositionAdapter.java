@@ -36,14 +36,7 @@ public class PositionAdapter implements PositionServicePort {
 
     private final PositionRepository positionRepository;
 
-    // TODO tutaj to trzeba przerobić, te serwisy juz sa tutaj wykorzystywane. Trzeba zrobić tak, że jak pozycja 0 jest
-    // np. z polski a następna już nie to wtedy powinien być stworzony ten EVentDto i trzeba pobrać mu te kraje ktore były
-    // tutaj mozliwe ze trzeba bedzie przekazac z bazy wczesniej pobrane wartosci, chcoiaz tutaj tez mozna sie odwolac do bazy idk
-    // ale jakos tak i wtedy bedzie mozna ten raport wygenerowac i nawet go zapisac wiec zostanie kwestia ustawienia postgres i
-    // tych propertiesow zeby sie podmieniło
 
-    // to jeszcze inaczej trzeba, mozna zrobic tak ze jak przychodzi ta informacja o pozycji to by sprawdzamy, czy poprzedni rekord w bazie
-    // ma ten sam kod kraju, a jak nie to DOPIERO wtedy tworzymy ten event ktory trafia do raportgeneratora
     @Override
     public void determineVehiclePosition(Truck truck, List<Position> positions) {
         // event

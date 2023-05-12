@@ -51,7 +51,7 @@ public class PositionPortImpl implements PositionPort {
                         final Position position = positionRepository.findPositionByPlate(p.getVehicleReg());
 
                         final Position newPosition = positions.stream()
-                                        .filter(e -> e.getVehicleReg().equals(p.getVehicleReg()))
+                                        .filter(e -> isVehicleRegEqual(position, e))
                                         .findFirst()
                                         .orElse(null);
 
@@ -60,5 +60,9 @@ public class PositionPortImpl implements PositionPort {
                         positionRepository.savePosition(newPosition);
                     }
         );
+    }
+
+    private boolean isVehicleRegEqual(Position position, Position newPosition) {
+        return position.getVehicleReg().equals(newPosition.getVehicleReg());
     }
 }

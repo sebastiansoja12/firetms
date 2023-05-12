@@ -26,10 +26,7 @@ public class ReportRepositoryImpl implements ReportRepository {
         reportReadRepository.save(reportEntity);
     }
 
-    // TODO albo mozna zrobic tak ze tylko bedzie ten EventEntity??? i on moze miec vehicleReg w sobie bo w sumie chyba musi miec
-    // i wtedy bedzie wiadomo kiedy skad wyjechal, a w bazie w position tez bedzie ta wartoisc i mozna by przy generowaniu raportu
-    // to jakos sklecic i zrobic obiekt ktory ma te borderCrossingEvent ale to nie bedzie encja tylko obiekt w ktory zapisze sie
-    // lista eventow
+
     @Override
     public Report findByVehicleReg(String vehicleReg) {
         final Optional<ReportEntity> report = reportReadRepository
