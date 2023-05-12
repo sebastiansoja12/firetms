@@ -20,6 +20,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -28,6 +29,7 @@ public class PositionAdapter implements PositionServicePort {
 
     private final LogEventPublisher logEventPublisher;
 
+    // to wyciagnac do nowej konfiguracji
     private final static String POSITION_URL = "http://localhost:8081/vehicles/coordinates/";
 
     private final GeocodingService geocodeService;
@@ -39,18 +41,52 @@ public class PositionAdapter implements PositionServicePort {
     // tutaj mozliwe ze trzeba bedzie przekazac z bazy wczesniej pobrane wartosci, chcoiaz tutaj tez mozna sie odwolac do bazy idk
     // ale jakos tak i wtedy bedzie mozna ten raport wygenerowac i nawet go zapisac wiec zostanie kwestia ustawienia postgres i
     // tych propertiesow zeby sie podmieniło
+
+    // to jeszcze inaczej trzeba, mozna zrobic tak ze jak przychodzi ta informacja o pozycji to by sprawdzamy, czy poprzedni rekord w bazie
+    // ma ten sam kod kraju, a jak nie to DOPIERO wtedy tworzymy ten event ktory trafia do raportgeneratora
     @Override
     public void determineVehiclePosition(Truck truck, List<Position> positions) {
         // event
-        final List<EventDto> events = IntStream.range(1, positions.size())
-                    .filter(i -> !positions.get(i).getCountry().equals(positions.get(i-1).getCountry()))
-                    .mapToObj(i -> EventDto.builder()
-                            .eventTimeStamp(Instant.now())
-                            .countryIn(positions.get(i).getCountry())
-                            .countryOut(positions.get(i-1).getCountry())
-                            .vehicleReg(positions.get(i).getVehicleReg())
-                            .build())
-                    .toList();
+        final Position position = getPosition(truck);
+
+        positions.forEach(
+                pos -> {
+                    if (!position.getCountry().equals(pos.getCountry())) {
+                        final EventDto event = EventDto.builder()
+                                .eventTimeStamp(Instant.now())
+                                .countryIn(position.getCountry())
+                                .countryOut(pos.getCountry())
+                                .vehicleReg(truck.getPlate())
+                                .build();
+
+                        final TruckPositionMessageDto message = TruckPositionMessageDto.builder()
+                                .raportTimeStamp(Instant.now())
+                                .events(List.of(event))
+                                .build();
+
+                        sendEvent(buildEvent(message));
+                    }
+                }
+        );
+    }
+
+    @Override
+    public Position determineVehiclePositions(Truck truck) {
+        return getPosition(truck);
+    }
+
+    @Override
+    public void createBorderCrossingEvent(Position position, Position newPosition) {
+        final List<EventDto> events = new ArrayList<>();
+
+        final EventDto event = EventDto.builder()
+                .eventTimeStamp(Instant.now())
+                .countryIn(newPosition.getCountry())
+                .countryOut(position.getCountry())
+                .vehicleReg(position.getVehicleReg())
+                .build();
+
+        events.add(event);
 
         final TruckPositionMessageDto message = TruckPositionMessageDto.builder()
                 .raportTimeStamp(Instant.now())
@@ -60,12 +96,11 @@ public class PositionAdapter implements PositionServicePort {
         sendEvent(buildEvent(message));
     }
 
-    @Override
-    public Position determineVehiclePositions(Truck truck) {
+    private Position getPosition(Truck truck) {
         final RestTemplate restTemplate = new RestTemplate();
         final String json = restTemplate.getForObject(POSITION_URL + truck.getPlate(), String.class);
         final ObjectMapper objectMapper = new ObjectMapper();
-        PositionTransfer positionTransfer = null;
+        PositionTransfer positionTransfer = new PositionTransfer();
         try {
             positionTransfer = objectMapper.readValue(json, PositionTransfer.class);
         } catch (JsonProcessingException e) {

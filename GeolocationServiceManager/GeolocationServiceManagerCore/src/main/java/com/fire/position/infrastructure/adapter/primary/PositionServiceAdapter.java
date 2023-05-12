@@ -33,4 +33,10 @@ public class PositionServiceAdapter implements PositionService {
         final Truck truck = positionRequestMapper.map(truckDto);
         positionPort.determineVehiclePositionWithReport(truck);
     }
+
+    @Override
+    public void getNewestPosition(List<PositionDto> position) {
+       final List<Position> positions = positionRequestMapper.map(position);
+       positionPort.determineNewestPosition(positions);
+    }
 }

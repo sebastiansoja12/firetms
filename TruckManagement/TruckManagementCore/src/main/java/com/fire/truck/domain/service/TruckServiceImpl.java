@@ -35,6 +35,7 @@ public class TruckServiceImpl implements TruckService {
         truckPositionServicePort.determinePositionWithReport(truck);
     }
 
+
     @Override
     public Truck getTruck(String plate) {
         return truckRepository.findByPlate(plate);

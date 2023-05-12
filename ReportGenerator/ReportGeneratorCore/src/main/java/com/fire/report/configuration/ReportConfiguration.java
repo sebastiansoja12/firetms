@@ -23,9 +23,8 @@ import java.util.logging.Logger;
 public class ReportConfiguration {
 
     @Bean
-    public ReportLogPort reportLogPort(ReportRepository reportRepository, BorderCrossRepository borderCrossRepository,
-        EventRepository eventRepository) {
-        return new ReportLogPortImpl(reportRepository, borderCrossRepository, eventRepository);
+    public ReportLogPort reportLogPort(EventRepository eventRepository) {
+        return new ReportLogPortImpl(eventRepository);
     }
 
     @Bean

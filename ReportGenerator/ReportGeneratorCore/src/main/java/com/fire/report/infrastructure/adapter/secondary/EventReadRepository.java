@@ -16,5 +16,5 @@ public interface EventReadRepository extends JpaRepository<EventEntity, Long> {
 
 
     @Query("SELECT DISTINCT r FROM EventEntity r WHERE r.vehicleReg = :vehicleReg")
-    Page<EventEntity> findAllByVehicleReg(@Param("vehicleReg") String vehicleReg, Pageable pageable);
+    Page<EventEntity> findDistinctEventTimestampByVehicleReg(@Param("vehicleReg") String vehicleReg, Pageable pageable);
 }

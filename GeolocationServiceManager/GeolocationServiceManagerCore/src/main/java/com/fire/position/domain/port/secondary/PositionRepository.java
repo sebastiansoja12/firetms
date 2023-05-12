@@ -12,4 +12,6 @@ public interface PositionRepository {
     List<Position> save(Position positions);
 
     void savePosition(Position position);
+
+    boolean checkIfExistsAlreadyPreviousPosition(Position position);
 }

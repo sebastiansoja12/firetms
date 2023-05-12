@@ -33,7 +33,8 @@ public class EventRepositoryImpl implements EventRepository {
     @Override
     public ReportResponse findByVehicleReg(String vehicleReg, Pageable pageable) {
 
-        final Page<EventEntity> eventEntities = eventReadRepository.findAllByVehicleReg(vehicleReg, pageable);
+        final Page<EventEntity> eventEntities = eventReadRepository
+                .findDistinctEventTimestampByVehicleReg(vehicleReg, pageable);
 
         final List<EventResponse> events = eventEntities.getContent().stream()
                 .map(eventModelMapper::mapToReportEvent)

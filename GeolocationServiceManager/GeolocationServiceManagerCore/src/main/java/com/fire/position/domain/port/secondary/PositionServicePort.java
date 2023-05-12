@@ -10,4 +10,6 @@ public interface PositionServicePort {
     void determineVehiclePosition(Truck truck, List<Position> positions);
 
     Position determineVehiclePositions(Truck truck);
+
+    void createBorderCrossingEvent(Position position, Position newPosition);
 }
