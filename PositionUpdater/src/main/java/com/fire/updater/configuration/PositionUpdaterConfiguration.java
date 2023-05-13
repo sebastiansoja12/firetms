@@ -2,6 +2,7 @@ package com.fire.updater.configuration;
 
 import com.fire.geocoding.GeocodingService;
 import com.fire.position.PositionService;
+import com.fire.telemetry.TelemetryProperties;
 import com.fire.updater.domain.port.primary.PositionUpdatePort;
 import com.fire.updater.domain.port.primary.PositionUpdatePortImpl;
 import com.fire.updater.domain.port.secondary.PositionUpdateServicePort;
@@ -21,7 +22,8 @@ public class PositionUpdaterConfiguration {
 
     @Bean
     public PositionUpdateServicePort positionUpdateServicePort(PositionService positionService,
-        GeocodingService geocodingService) {
-        return new PositionUpdateAdapter(positionService, Mappers.getMapper(PositionMapper.class), geocodingService);
+         GeocodingService geocodingService, TelemetryProperties telemetryProperties) {
+        return new PositionUpdateAdapter(positionService,
+                Mappers.getMapper(PositionMapper.class), geocodingService, telemetryProperties);
     }
 }

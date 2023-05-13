@@ -9,19 +9,22 @@ import com.fire.geocoding.dto.CountryResponseDto;
 import com.fire.position.PositionService;
 import com.fire.position.dto.PositionDto;
 import com.fire.telemetry.TelemetryProperties;
+import com.fire.updater.configuration.PositionServiceConfiguration;
 import com.fire.updater.domain.model.PositionUpdateTransfer;
 import com.fire.updater.domain.port.secondary.PositionUpdateServicePort;
 import com.fire.updater.instrastructure.adapter.secondary.mapper.PositionMapper;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-public class PositionUpdateAdapter extends TelemetryProperties implements PositionUpdateServicePort {
+public class PositionUpdateAdapter implements PositionUpdateServicePort {
 
     private final PositionService positionService;
 
@@ -29,9 +32,13 @@ public class PositionUpdateAdapter extends TelemetryProperties implements Positi
 
     private final GeocodingService geocodingService;
 
+    @NonNull
+    private final TelemetryProperties telemetryProperties;
+
     @Override
     public void positionUpdateTransferList() {
-        final List<PositionUpdateTransfer> positionUpdateTransferList = getPositionUpdateTransfers()
+        final PositionUpdaterAdapterConfiguration configuration = new PositionUpdaterAdapterConfiguration();
+        final List<PositionUpdateTransfer> positionUpdateTransferList = getPositionUpdateTransfers(configuration)
                 .stream()
                 .filter(PositionUpdateTransfer::isTelemetryEnabled)
                 .collect(Collectors.toList());
@@ -48,16 +55,31 @@ public class PositionUpdateAdapter extends TelemetryProperties implements Positi
         positionService.getNewestPosition(positions);
     }
 
-    private List<PositionUpdateTransfer> getPositionUpdateTransfers() {
+    private List<PositionUpdateTransfer> getPositionUpdateTransfers(
+            PositionUpdaterAdapterConfiguration positionUpdaterAdapterConfiguration) {
         final RestTemplate restTemplate = new RestTemplate();
         final ObjectMapper objectMapper = new ObjectMapper();
         List<PositionUpdateTransfer> positionTransfer = new ArrayList<>();
         try {
-            final String json = restTemplate.getForObject(getUrl(), String.class);
+            final String url = positionUpdaterAdapterConfiguration.getUrl();
+            final String json = restTemplate.getForObject(url, String.class);
             positionTransfer = objectMapper.readValue(json, new TypeReference<>() {});
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         return positionTransfer;
+    }
+
+    private class PositionUpdaterAdapterConfiguration implements PositionServiceConfiguration {
+
+        @Override
+        public String getUrl() {
+            return telemetryProperties.getUrl();
+        }
+
+        @Override
+        public String getStage() {
+            return telemetryProperties.getStage();
+        }
     }
 }

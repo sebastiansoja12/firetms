@@ -8,8 +8,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -32,23 +34,24 @@ public class EventRepositoryImpl implements EventRepository {
     }
 
     @Override
-    public ReportResponse findByVehicleReg(String vehicleReg, Pageable pageable) {
+    public List<EventResponse> findByVehicleReg(String vehicleReg, Pageable pageable) {
 
         final Page<EventEntity> eventEntities = eventReadRepository
                 .findDistinctEventTimestampByVehicleReg(vehicleReg, pageable);
 
-        final List<EventResponse> events = eventEntities.getContent().stream()
+        return eventEntities.getContent().stream()
                 .map(eventModelMapper::mapToReportEvent)
-                .collect(Collectors.toList());
-
-        final BorderCrossing borderCrossing = new BorderCrossing(vehicleReg, events);
-
-        return new ReportResponse(new Report(borderCrossing));
+                .toList();
     }
 
     @Override
-    public ReportResponse findByVehicleRegAndDates(String vehicleReg, Instant dateFrom, Instant dateTo) {
-        return null;
+    public List<EventResponse> findByVehicleRegAndDates(String vehicleReg, Instant dateFrom, Instant dateTo) {
+        final List<EventEntity> eventEntities = eventReadRepository
+                .findEventsByVehicleRegAndDates(vehicleReg, dateFrom, dateTo);
+
+        return eventEntities.stream()
+                .map(eventModelMapper::mapToReportEvent)
+                .toList();
     }
 
 }

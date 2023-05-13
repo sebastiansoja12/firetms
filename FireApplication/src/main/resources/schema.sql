@@ -16,9 +16,8 @@ CREATE TABLE IF NOT EXISTS POSITION
 CREATE TABLE IF NOT EXISTS EVENT
 (
     id               BIGINT    NOT NULL AUTO_INCREMENT,
-    event_time_stamp TIMESTAMP NOT NULL,
+    event_time_stamp DATETIME NOT NULL,
     country_out      VARCHAR(255) NOT NULL,
     country_in       VARCHAR(255) NOT NULL,
-    vehicle_reg      VARCHAR(255) NOT NULL,
-    PRIMARY KEY (id)
+    vehicle_reg      VARCHAR(255) NOT NULL
 );

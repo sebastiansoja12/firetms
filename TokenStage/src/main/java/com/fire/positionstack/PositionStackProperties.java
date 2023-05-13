@@ -38,5 +38,7 @@ public class PositionStackProperties extends GeoProperties {
         this.token = token;
     }
 
-
+    public String createRequest(String value) {
+        return getUrl() + value;
+    }
 }

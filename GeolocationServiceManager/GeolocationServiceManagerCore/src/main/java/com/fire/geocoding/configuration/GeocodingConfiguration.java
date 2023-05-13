@@ -10,6 +10,7 @@ import com.fire.geocoding.infrastructure.adapter.primary.GeocodingServiceAdapter
 import com.fire.geocoding.infrastructure.adapter.primary.mapper.GeocodingRequestMapper;
 import com.fire.geocoding.infrastructure.adapter.primary.mapper.GeocodingResponseMapper;
 import com.fire.geocoding.infrastructure.adapter.secondary.GeocodeAdapter;
+import com.fire.positionstack.PositionStackProperties;
 import org.mapstruct.factory.Mappers;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,8 +31,9 @@ public class GeocodingConfiguration {
     }
 
     @Bean
-    public GeocodeServicePort geocodeServicePort(UrlJsonReaderService jsonReaderService) {
-        return new GeocodeAdapter(jsonReaderService);
+    public GeocodeServicePort geocodeServicePort(UrlJsonReaderService jsonReaderService,
+                                                 PositionStackProperties positionStackProperties) {
+        return new GeocodeAdapter(jsonReaderService, positionStackProperties);
     }
 
     @Bean

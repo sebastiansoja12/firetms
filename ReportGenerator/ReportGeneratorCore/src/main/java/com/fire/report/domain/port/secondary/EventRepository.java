@@ -1,6 +1,7 @@
 package com.fire.report.domain.port.secondary;
 
 import com.fire.report.domain.model.Event;
+import com.fire.report.domain.model.EventResponse;
 import com.fire.report.domain.model.ReportResponse;
 import org.springframework.data.domain.Pageable;
 
@@ -12,7 +13,7 @@ public interface EventRepository {
 
     void save(List<Event> events);
 
-    ReportResponse findByVehicleReg(String vehicleReg, Pageable pageable);
+    List<EventResponse> findByVehicleReg(String vehicleReg, Pageable pageable);
 
-    ReportResponse findByVehicleRegAndDates(String vehicleReg, Instant dateFrom, Instant dateTo);
+    List<EventResponse> findByVehicleRegAndDates(String vehicleReg, Instant dateFrom, Instant dateTo);
 }

@@ -1,21 +1,20 @@
 package com.fire.telemetry;
 
-import com.fire.properties.GeoProperties;
 import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Service;
 
 @Getter
 @ConfigurationProperties(prefix = "telemetry")
-public class TelemetryProperties extends GeoProperties {
+public class TelemetryProperties {
 
-    private static final String URL = "telemetry.url";
-
-    private static final String STAGE = "telemetry.stage";
 
     private String url;
 
     private String stage;
-
 
     public void setUrl(String url) {
         this.url = url;
@@ -24,5 +23,4 @@ public class TelemetryProperties extends GeoProperties {
     public void setStage(String stage) {
         this.stage = stage;
     }
-
 }

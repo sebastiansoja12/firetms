@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+
+    <event
+            ID = "1"
+            EVENT_TIME_STAMP="2023-05-13 08:12:34"
+            COUNTRY_OUT = "POL"
+            COUNTRY_IN = "DEU"
+            VEHICLE_REG = "SR1234"
+    />
+
+    <event
+            ID = "2"
+            EVENT_TIME_STAMP="2023-05-14 08:12:34"
+            COUNTRY_OUT = "DEU"
+            COUNTRY_IN = "POL"
+            VEHICLE_REG = "SR1234"
+    />
+
+    <event
+            ID = "3"
+            EVENT_TIME_STAMP="2023-05-14 08:12:34"
+            COUNTRY_OUT = "DEU"
+            COUNTRY_IN = "POL"
+            VEHICLE_REG = "SO1234"
+    />
+
+
+
+
+
+</dataset>
