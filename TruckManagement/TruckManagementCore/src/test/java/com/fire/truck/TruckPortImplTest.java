@@ -1,6 +1,9 @@
 package com.fire.truck;
 
-import com.fire.truck.domain.model.*;
+import com.fire.truck.domain.model.Coordinate;
+import com.fire.truck.domain.model.Position;
+import com.fire.truck.domain.model.Truck;
+import com.fire.truck.domain.model.TruckRequest;
 import com.fire.truck.domain.port.primary.TruckPort;
 import com.fire.truck.domain.port.primary.TruckPortImpl;
 import com.fire.truck.domain.service.TruckService;

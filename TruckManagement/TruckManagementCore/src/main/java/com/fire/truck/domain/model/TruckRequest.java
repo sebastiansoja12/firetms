@@ -9,4 +9,8 @@ public class TruckRequest {
 
     private boolean telematicsEnabled;
 
+    public boolean isNotNull() {
+        return !this.equals(EMPTY);
+    }
+    private static final TruckRequest EMPTY = new TruckRequest();
 }
