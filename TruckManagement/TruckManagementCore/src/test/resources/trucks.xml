@@ -5,10 +5,6 @@
             PLATE = "SR1234"
             TELEMATICS="1"
     />
-    <position
-        VEHICLE_REG="SR1234"
-        />
-
 
 
 </dataset>

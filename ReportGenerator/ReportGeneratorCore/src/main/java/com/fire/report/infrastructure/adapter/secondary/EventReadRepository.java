@@ -15,19 +15,15 @@ import java.util.Optional;
 
 @Repository
 public interface EventReadRepository extends JpaRepository<EventEntity, Long> {
-    Optional<EventEntity> findById(Long id);
-
 
     @Query("SELECT DISTINCT r FROM EventEntity r WHERE r.vehicleReg = :vehicleReg")
     Page<EventEntity> findDistinctEventTimestampByVehicleReg(@Param("vehicleReg") String vehicleReg, Pageable pageable);
 
-    @Query("SELECT e FROM EventEntity e WHERE e.vehicleReg = :vehicleReg AND e.eventTimeStamp BETWEEN :dateFrom AND :dateTo")
+    @Query("SELECT e FROM EventEntity e WHERE e.vehicleReg = :vehicleReg AND e.eventTimeStamp BETWEEN :dateFrom AND :dateTo" +
+            " ORDER BY e.eventTimeStamp ASC")
     List<EventEntity> findEventsByVehicleRegAndDates(@Param("vehicleReg") String vehicleReg,
                                                      @Param("dateFrom") Instant dateFrom,
                                                      @Param("dateTo") Instant dateTo);
-
-
-
 
 
 }

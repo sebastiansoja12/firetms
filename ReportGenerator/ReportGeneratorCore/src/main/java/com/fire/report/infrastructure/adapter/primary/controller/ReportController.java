@@ -26,7 +26,7 @@ public class ReportController {
         return reportControllerPort.findByVehicleReg(vehicleReg, pageNumber, pageSize);
     }
 
-    @GetMapping("/sorted/{vehicleReg}/{dateFrom}/{dateTo}")
+    @GetMapping("/sorted/{vehicleReg}/dateFrom/{dateFrom}/dateTo/{dateTo}")
     public ReportResponse getReportSorted(@PathVariable String vehicleReg,
                                           @PathVariable String dateFrom, @PathVariable String dateTo) {
         return reportControllerPort.generateReportByDates(vehicleReg, dateFrom, dateTo);

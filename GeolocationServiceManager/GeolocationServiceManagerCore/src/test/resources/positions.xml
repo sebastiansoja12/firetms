@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <position
+            ID = "1"
+            VEHICLE_REG = "SR1234"
+            COUNTRY = "POL"
+            LONGITUDE = "50.12"
+            LATITUDE = "19.12"
+            TIME_STAMP = "2023-05-14 08:12:34"
+            TELEMATICS="1"
+    />
+    <position
+            ID = "2"
+            VEHICLE_REG = "SR1234"
+            COUNTRY = "POL"
+            LONGITUDE = "51.12"
+            LATITUDE = "20.12"
+            TIME_STAMP = "2023-05-14 09:12:34"
+            TELEMATICS="1"
+    />
+    <position
+            ID = "3"
+            VEHICLE_REG = "SR1234"
+            COUNTRY = "POL"
+            LONGITUDE = "53.12"
+            LATITUDE = "17.12"
+            TIME_STAMP = "2023-05-14 10:12:34"
+            TELEMATICS="1"
+    />
+
+    <position
+            ID = "4"
+            VEHICLE_REG = "SO1234"
+            COUNTRY = "POL"
+            LONGITUDE = "53.12"
+            LATITUDE = "17.12"
+            TIME_STAMP = "2023-05-11 12:12:34"
+            TELEMATICS="1"
+    />
+</dataset>

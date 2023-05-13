@@ -12,8 +12,5 @@ import java.util.Optional;
 public interface PositionReadRepository extends JpaRepository<PositionEntity, Long> {
     List<PositionEntity> findAllByVehicleReg(String vehicleReg, Sort sort);
 
-    Optional<PositionEntity> findByVehicleReg(String vehicleReg, Sort sort);
-
-
     boolean existsByVehicleReg(String vehicleReg);
 }

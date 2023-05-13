@@ -7,6 +7,7 @@ import com.fire.report.infrastructure.adapter.secondary.mapper.EventModelMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.sql.Timestamp;
 import java.time.Instant;
