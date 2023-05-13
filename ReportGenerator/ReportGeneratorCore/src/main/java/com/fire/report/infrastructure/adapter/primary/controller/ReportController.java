@@ -15,10 +15,6 @@ public class ReportController {
 
     private final ReportControllerPort reportControllerPort;
 
-    @GetMapping("/{vehicleReg}")
-    public ReportResponse getReport(@PathVariable String vehicleReg) {
-        return reportControllerPort.downloadReportByVehiclePlate(vehicleReg);
-    }
 
     @GetMapping("/sorted/{vehicleReg}/{pageNumber}/{pageSize}")
     public ReportResponse getReportSorted(@PathVariable String vehicleReg,

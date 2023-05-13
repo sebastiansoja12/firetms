@@ -17,11 +17,6 @@ public class ReportControllerPortImpl implements ReportControllerPort {
 
     private final EventRepository eventRepository;
 
-    @Override
-    public ReportResponse downloadReportByVehiclePlate(String vehicleReg) {
-
-        return new ReportResponse(null);
-    }
 
     @Override
     public ReportResponse findByVehicleReg(String vehicleReg, int pageNumber, int pageSize) {

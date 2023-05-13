@@ -1,19 +1,16 @@
 package com.fire.report.infrastructure.adapter.secondary;
 
-import com.fire.report.domain.model.*;
+import com.fire.report.domain.model.Event;
+import com.fire.report.domain.model.EventResponse;
 import com.fire.report.domain.port.secondary.EventRepository;
 import com.fire.report.infrastructure.adapter.secondary.entity.EventEntity;
 import com.fire.report.infrastructure.adapter.secondary.mapper.EventModelMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class EventRepositoryImpl implements EventRepository {
