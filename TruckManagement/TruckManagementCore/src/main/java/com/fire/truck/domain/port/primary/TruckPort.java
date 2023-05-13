@@ -9,9 +9,6 @@ import java.util.List;
 public interface TruckPort {
     void addTruck(List<TruckRequest> truckRequest);
 
-    TruckPositionResponse getTruckWithPosition(String plate);
-
     Truck getTruckByPlate(String plate);
 
-    void getTruckPositionWithReport(String plate);
 }

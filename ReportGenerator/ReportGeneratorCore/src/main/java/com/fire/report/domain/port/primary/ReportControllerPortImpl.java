@@ -28,7 +28,7 @@ public class ReportControllerPortImpl implements ReportControllerPort {
         final Pageable pageable = PageRequest.of(pageNumber, pageSize);
         final List<EventResponse> responses = eventRepository.findByVehicleReg(vehicleReg, pageable);
         final BorderCrossing borderCrossing = new BorderCrossing(vehicleReg, responses);
-        return new ReportResponse(new Report(borderCrossing));
+        return new ReportResponse(List.of(new Report(borderCrossing)));
     }
 
     @Override
@@ -40,6 +40,6 @@ public class ReportControllerPortImpl implements ReportControllerPort {
         final BorderCrossing borderCrossing = new BorderCrossing(vehicleReg, responses);
 
         final Report report = new Report(borderCrossing);
-        return new ReportResponse(report);
+        return new ReportResponse(List.of(report));
     }
 }

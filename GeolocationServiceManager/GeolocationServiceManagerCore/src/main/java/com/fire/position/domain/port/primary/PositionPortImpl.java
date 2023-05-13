@@ -1,36 +1,23 @@
 package com.fire.position.domain.port.primary;
 
-import com.fire.position.domain.model.Position;
-import com.fire.position.domain.model.Truck;
+import com.fire.position.domain.model.*;
 import com.fire.position.domain.port.secondary.PositionRepository;
-import com.fire.position.domain.port.secondary.PositionServicePort;
 import com.fire.position.domain.service.PositionDetectService;
+import com.fire.position.infrastructure.adapter.secondary.entity.PositionEntity;
 import lombok.AllArgsConstructor;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @AllArgsConstructor
 public class PositionPortImpl implements PositionPort {
 
     private final PositionDetectService positionService;
 
-    private final PositionServicePort positionServicePort;
-
     private final PositionRepository positionRepository;
 
-
-    @Override
-    public List<Position> determineVehiclePosition(Truck truck) {
-        final Position position = positionServicePort.determineVehiclePositions(truck);
-        return positionRepository.save(position);
-    }
-
-    @Override
-    public void determineVehiclePositionWithReport(Truck truck) {
-        final List<Position> positions = positionRepository.findPositionsByPlate(truck.getPlate());
-        positionServicePort.determineVehiclePosition(truck, positions);
-    }
 
     @Override
     public void insertPosition(Position position) {
@@ -40,28 +27,67 @@ public class PositionPortImpl implements PositionPort {
 
     @Override
     public void determineNewestPosition(List<Position> positions) {
-
         positions
                 .forEach(
                     p -> {
-                        if (!positionRepository.checkIfExistsAlreadyPreviousPosition(p)) {
-                            positionRepository.savePosition(p);
+                        Position position = null;
+
+                        final Optional<PositionEntity> positionEntity = positionRepository
+                                .findPositionOnPlate(p.getVehicleReg());
+
+                        if (positionEntity.isEmpty()) {
+                            position = positionRepository.savePosition(p);
                         }
-                        final Position position = positionRepository.findPositionByPlate(p.getVehicleReg());
+
+
+                        if (position == null) {
+                            position = positionEntity.map(this::map).orElse(p);
+                        }
+
+
+                        final Position previousPosition = position;
 
                         final Position newPosition = positions.stream()
-                                        .filter(e -> isVehicleRegEqual(position, e))
+                                        .filter(this::isNotNull)
+                                        .filter(e -> isVehicleRegEqual(previousPosition, e))
                                         .findFirst()
                                         .orElse(null);
 
-                        positionService.detectBorderCrossing(position, newPosition);
+                        positionService.detectBorderCrossing(previousPosition, newPosition);
 
-                        positionRepository.savePosition(newPosition);
+                        if (positionEntity.isPresent()) {
+                            positionRepository.savePosition(newPosition);
+                        }
+
                     }
         );
     }
 
-    private boolean isVehicleRegEqual(Position position, Position newPosition) {
+    @Override
+    public TruckPosition getVehiclePosition(String vehicleReg, int pageNumber, int pageSize) {
+        final List<PositionResponse> positions = positionRepository
+                .findPositionsByPlate(vehicleReg, pageNumber, pageSize)
+                .stream()
+                .map(this::map)
+                .toList();
+        return new TruckPosition(vehicleReg, positions);
+    }
+
+    public boolean isVehicleRegEqual(Position position, Position newPosition) {
         return position.getVehicleReg().equals(newPosition.getVehicleReg());
+    }
+
+    private Position map(PositionEntity positionEntity) {
+        return new Position(positionEntity.getVehicleReg(),
+                new Coordinate(positionEntity.getLongitude(), positionEntity.getLatitude()),
+                        positionEntity.getCountry(), positionEntity.getTimestamp().toString());
+    }
+
+    private PositionResponse map(Position position) {
+        return new PositionResponse(position.getCoordinate(), position.getCountry(), position.getTimestamp());
+    }
+
+    private boolean isNotNull(Position position) {
+        return Objects.nonNull(position);
     }
 }

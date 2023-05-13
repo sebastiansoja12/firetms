@@ -1,17 +1,16 @@
 package com.fire.position.domain.port.secondary;
 
 import com.fire.position.domain.model.Position;
+import com.fire.position.infrastructure.adapter.secondary.entity.PositionEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PositionRepository {
-    List<Position> findPositionsByPlate(String plate);
+    List<Position> findPositionsByPlate(String plate, int pageSize, int pageNumber);
 
-    Position findPositionByPlate(String plate);
+    Position savePosition(Position position);
 
-    List<Position> save(Position positions);
+    Optional<PositionEntity> findPositionOnPlate(String plate);
 
-    void savePosition(Position position);
-
-    boolean checkIfExistsAlreadyPreviousPosition(Position position);
 }

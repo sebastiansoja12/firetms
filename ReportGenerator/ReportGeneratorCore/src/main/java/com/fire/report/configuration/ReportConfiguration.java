@@ -21,9 +21,6 @@ public class ReportConfiguration {
         return new ReportLogPortImpl(eventRepository);
     }
 
-
-
-
     @Bean
     public EventRepository eventRepository(EventReadRepository eventReadRepository) {
         final EventModelMapper eventModelMapper = Mappers.getMapper(EventModelMapper.class);

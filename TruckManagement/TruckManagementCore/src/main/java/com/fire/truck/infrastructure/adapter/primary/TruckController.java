@@ -44,17 +44,4 @@ public class TruckController {
         final TruckResponseDto truckResponse = truckResponseMapper.map(truck);
         return ResponseEntity.status(HttpStatus.FOUND).body(truckResponse);
     }
-
-    @GetMapping("/position/{plate}")
-    public ResponseEntity<?> getTrucksPosition(@PathVariable String plate) {
-        final TruckPositionResponse truckResponse = truckPort.getTruckWithPosition(plate);
-        return ResponseEntity.status(HttpStatus.FOUND).body(truckResponse);
-    }
-
-    @GetMapping("/report/{plate}")
-    public ResponseEntity<?> getTruckPositionWithReport(@PathVariable String plate) {
-        truckPort.getTruckPositionWithReport(plate);
-        return ResponseEntity.status(HttpStatus.FOUND).build();
-    }
-
 }

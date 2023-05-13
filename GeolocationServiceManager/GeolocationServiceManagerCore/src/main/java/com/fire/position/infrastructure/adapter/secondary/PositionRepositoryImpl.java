@@ -6,9 +6,13 @@ import com.fire.position.infrastructure.adapter.secondary.entity.PositionEntity;
 import com.fire.position.infrastructure.adapter.secondary.exception.PositionNotFoundException;
 import com.fire.position.infrastructure.adapter.secondary.mapper.PositionModelMapper;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -19,43 +23,23 @@ public class PositionRepositoryImpl implements PositionRepository {
     private final PositionModelMapper positionModelMapper;
 
     @Override
-    public List<Position> findPositionsByPlate(String plate) {
-        final Sort sort = Sort.by(Sort.Direction.DESC, "id");
-
-        return positionReadRepository.findAllByVehicleReg(plate, sort)
-                .stream().map(positionModelMapper::map)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public Position findPositionByPlate(String plate) {
-        final Sort sort = Sort.by(Sort.Direction.DESC, "timestamp");
-        final Position position = positionReadRepository.findAllByVehicleReg(plate, sort).stream().map(positionModelMapper::map)
-                .findFirst()
-                .orElseThrow(() -> new PositionNotFoundException("Position with plate: " + plate + " was not found!"));
-
-        return position;
-    }
-
-    @Override
-    public List<Position> save(Position position) {
-        final PositionEntity positionEntities = positionModelMapper.map(position);
-        positionReadRepository.save(positionEntities);
-        final Sort sort = Sort.by(Sort.Direction.DESC, "id");
-
-        return positionReadRepository.findAllByVehicleReg(position.getVehicleReg(), sort).stream()
+    public List<Position> findPositionsByPlate(String plate, int pageSize, int pageNumber) {
+        final Pageable pageable = PageRequest.of(pageNumber, pageSize);
+         return positionReadRepository.findAllByVehicleReg(plate, pageable)
+                .stream()
                 .map(positionModelMapper::map)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void savePosition(Position position) {
+    public Position savePosition(Position position) {
         final PositionEntity positionEntity = positionModelMapper.map(position);
-        positionReadRepository.save(positionEntity);
+        return positionModelMapper.map(positionReadRepository.save(positionEntity));
     }
 
     @Override
-    public boolean checkIfExistsAlreadyPreviousPosition(Position position) {
-        return positionReadRepository.existsByVehicleReg(position.getVehicleReg());
+    public Optional<PositionEntity> findPositionOnPlate(String plate) {
+        final Sort sort = Sort.by(Sort.Direction.ASC, "timestamp");
+        return positionReadRepository.findDistinctFirstByVehicleRegOrderByIdDesc(plate);
     }
 }

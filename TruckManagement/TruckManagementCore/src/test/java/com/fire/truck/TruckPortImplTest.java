@@ -58,22 +58,6 @@ public class TruckPortImplTest {
         verify(truckService, times(0)).addTruck(any());
     }
 
-    @Test
-    void shouldGetTruckWithPosition() {
-        // given
-        final String plate = "SR1234";
-
-        final List<Position> positions = createPositions();
-
-        final TruckPositionResponse expectedPositionResponse = new TruckPositionResponse(plate, positions);
-
-        when(truckService.getTruckWithPosition(plate)).thenReturn(expectedPositionResponse);
-        // when
-        final TruckPositionResponse positionResponse = truckPort.getTruckWithPosition(plate);
-
-        // then
-        assertEquals(expectedPositionResponse, positionResponse);
-    }
 
     @Test
     void shouldGetTruck() {

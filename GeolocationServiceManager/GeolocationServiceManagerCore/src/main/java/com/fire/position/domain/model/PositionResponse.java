@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Position {
-
-    private String vehicleReg;
+public class PositionResponse {
     private Coordinate coordinate;
     private String country;
     private String timestamp;

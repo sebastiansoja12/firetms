@@ -1,22 +1,25 @@
-package com.fire.updater.configuration;
+package com.fire.updater.configuration.mock;
 
 import com.fire.position.PositionService;
 import com.fire.position.dto.CoordinateDto;
 import com.fire.position.dto.PositionDto;
 import com.fire.updater.domain.model.PositionUpdateTransfer;
+import com.fire.updater.domain.model.Vehicle;
 import com.fire.updater.domain.port.secondary.PositionUpdateServicePort;
 import lombok.AllArgsConstructor;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 public class TelemetryMockConfiguration {
 
     @AllArgsConstructor
-    static class PositionUpdateMockAdapter implements PositionUpdateServicePort {
+    public static class PositionUpdateMockAdapter implements PositionUpdateServicePort {
 
         private final PositionService positionService;
+
+        private final MockVehiclePositionUpdater mockVehiclePositionUpdater;
 
         @Override
         public void positionUpdateTransferList() {
@@ -45,13 +48,20 @@ public class TelemetryMockConfiguration {
         }
 
         private List<PositionUpdateTransfer> preparePositionTransfers() {
+            final List<Vehicle> vehicles = mockVehiclePositionUpdater.getVehicles();
+            return vehicles.stream()
+                    .map(this::map)
+                    .toList();
+        }
+
+        private PositionUpdateTransfer map(Vehicle vehicle) {
             final PositionUpdateTransfer positionUpdateTransfer = new PositionUpdateTransfer();
-            positionUpdateTransfer.setLatitude(19.0);
-            positionUpdateTransfer.setLongitude(50.0);
-            positionUpdateTransfer.setTelemetryEnabled(true);
-            positionUpdateTransfer.setVehicleReg("SR1234");
-            positionUpdateTransfer.setTimeStamp(Instant.now().toString());
-            return List.of(positionUpdateTransfer);
+            positionUpdateTransfer.setLatitude(vehicle.getLatitude());
+            positionUpdateTransfer.setLongitude(vehicle.getLongitude());
+            positionUpdateTransfer.setTelemetryEnabled(vehicle.isTelemetryEnabled());
+            positionUpdateTransfer.setVehicleReg(vehicle.getVehicleReg());
+            positionUpdateTransfer.setTimeStamp(vehicle.getTimeStamp().toString());
+            return positionUpdateTransfer;
         }
     }
 }

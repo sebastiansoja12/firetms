@@ -17,8 +17,6 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

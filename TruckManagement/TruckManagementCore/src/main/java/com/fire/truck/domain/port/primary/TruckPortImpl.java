@@ -23,18 +23,8 @@ public class TruckPortImpl implements TruckPort {
     }
 
     @Override
-    public TruckPositionResponse getTruckWithPosition(String plate) {
-        return truckService.getTruckWithPosition(plate);
-    }
-
-    @Override
     public Truck getTruckByPlate(String plate) {
         return truckService.getTruck(plate);
-    }
-
-    @Override
-    public void getTruckPositionWithReport(String plate) {
-        truckService.getTruckPositionWithReport(plate);
     }
 
     private boolean isNotNull(TruckRequest truckRequest) {

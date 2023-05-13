@@ -10,7 +10,6 @@ import com.fire.position.domain.service.PositionDetectService;
 import com.fire.position.domain.service.PositionDetectServiceImpl;
 import com.fire.position.infrastructure.adapter.primary.PositionServiceAdapter;
 import com.fire.position.infrastructure.adapter.primary.mapper.PositionRequestMapper;
-import com.fire.position.infrastructure.adapter.primary.mapper.PositionResponseMapper;
 import com.fire.position.infrastructure.adapter.secondary.PositionAdapter;
 import com.fire.position.infrastructure.adapter.secondary.PositionReadRepository;
 import com.fire.position.infrastructure.adapter.secondary.PositionRepositoryImpl;
@@ -26,14 +25,13 @@ public class PositionConfiguration {
     @Bean
     public PositionService positionService(PositionPort positionPort) {
         final PositionRequestMapper positionRequestMapper = Mappers.getMapper(PositionRequestMapper.class);
-        final PositionResponseMapper positionResponseMapper = Mappers.getMapper(PositionResponseMapper.class);
-        return new PositionServiceAdapter(positionRequestMapper, positionResponseMapper, positionPort);
+        return new PositionServiceAdapter(positionRequestMapper, positionPort);
     }
 
     @Bean
-    public PositionPort positionPort(PositionServicePort positionServicePort, PositionRepository positionRepository,
+    public PositionPort positionPort(PositionRepository positionRepository,
                                      PositionDetectService positionDetectService) {
-        return new PositionPortImpl(positionDetectService, positionServicePort, positionRepository);
+        return new PositionPortImpl(positionDetectService, positionRepository);
     }
 
     @Bean
