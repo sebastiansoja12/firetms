@@ -25,13 +25,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ContextConfiguration(classes = PositionTestConfiguration.class)
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, TransactionDbUnitTestExecutionListener.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@DatabaseSetup("classpath:positions.xml")
 public class PositionReadRepositoryTest {
 
     @Autowired
     private PositionReadRepository positionReadRepository;
 
     @Test
-    @DatabaseSetup("positions.xml")
     void shouldFindPositionByPlate() {
         // given
         final String plate = "SR1234";
@@ -45,7 +45,6 @@ public class PositionReadRepositoryTest {
     }
 
     @Test
-    @DatabaseSetup("positions.xml")
     void shouldNotFindPositionByPlate() {
         // given
         final String plate = "abc";
@@ -59,7 +58,6 @@ public class PositionReadRepositoryTest {
     }
 
     @Test
-    @DatabaseSetup("positions.xml")
     void shouldFindPositionByPlateAndReturnTrue() {
         // given
         final String plate = "SR1234";
@@ -71,7 +69,6 @@ public class PositionReadRepositoryTest {
     }
 
     @Test
-    @DatabaseSetup("positions.xml")
     void shouldFindPositionByPlateAndReturnFalse() {
         // given
         final String plate = "abc";
