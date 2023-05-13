@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.Optional;
 
 @Repository
@@ -17,4 +18,15 @@ public interface EventReadRepository extends JpaRepository<EventEntity, Long> {
 
     @Query("SELECT DISTINCT r FROM EventEntity r WHERE r.vehicleReg = :vehicleReg")
     Page<EventEntity> findDistinctEventTimestampByVehicleReg(@Param("vehicleReg") String vehicleReg, Pageable pageable);
+
+    @Query("SELECT e FROM EventEntity e WHERE e.vehicleReg = :vehicleReg AND e.eventTimeStamp BETWEEN :dateFrom AND :dateTo")
+    Page<EventEntity> findEventsByVehicleRegAndDates(@Param("vehicleReg") String vehicleReg,
+                                                     @Param("dateFrom") Instant dateFrom,
+                                                     @Param("dateTo") Instant dateTo,
+                                                     Pageable pageable);
+
+
+
+
+
 }

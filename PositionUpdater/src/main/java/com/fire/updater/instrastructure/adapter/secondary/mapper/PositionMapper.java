@@ -12,6 +12,7 @@ public interface PositionMapper {
     @Mapping(source = "longitude", target = "coordinate.longitude")
     @Mapping(source = "latitude", target = "coordinate.latitude")
     @Mapping(source = "timeStamp", target = "timestamp")
+    @Mapping(target = "country", ignore = true)
     PositionDto map(PositionUpdateTransfer positionUpdateTransfer);
 
     List<PositionDto> map(List<PositionUpdateTransfer> positionUpdateTransfer);

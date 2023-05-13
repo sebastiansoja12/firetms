@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fire.geocoding.domain.model.Coordinate;
 import com.fire.geocoding.domain.port.secondary.GeocodeServicePort;
 import com.fire.geocoding.domain.service.UrlJsonReaderService;
-import com.fire.positionstack.TokenStageProperties;
+import com.fire.positionstack.PositionStackProperties;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,9 +14,7 @@ import java.net.URL;
 
 @AllArgsConstructor
 @Slf4j
-public class GeocodeAdapter implements GeocodeServicePort {
-
-    private final TokenStageProperties tokenStageProperties;
+public class GeocodeAdapter extends PositionStackProperties implements GeocodeServicePort {
 
     private final UrlJsonReaderService jsonReaderService;
 
@@ -45,7 +43,7 @@ public class GeocodeAdapter implements GeocodeServicePort {
     }
 
     private String createRequest(String coordinates) {
-        return tokenStageProperties.createRequestLink(coordinates);
+        return getUrl() + coordinates;
     }
 
 

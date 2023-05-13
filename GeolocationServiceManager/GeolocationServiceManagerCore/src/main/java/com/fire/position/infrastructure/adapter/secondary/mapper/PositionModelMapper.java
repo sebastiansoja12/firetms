@@ -18,6 +18,7 @@ public interface PositionModelMapper {
     @Mapping(target = "longitude", source = "coordinate.longitude")
     @Mapping(target = "latitude", source = "coordinate.latitude")
     @Mapping(target = "timestamp", source = "timestamp")
+    @Mapping(target = "id", ignore = true)
     PositionEntity map(Position position);
 
     List<PositionEntity> mapToEntity(List<Position> positions);

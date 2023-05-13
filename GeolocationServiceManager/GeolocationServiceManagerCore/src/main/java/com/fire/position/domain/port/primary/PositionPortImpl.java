@@ -19,8 +19,7 @@ public class PositionPortImpl implements PositionPort {
 
     private final PositionRepository positionRepository;
 
-    // tutaj ta logika z tym eventem Event ktory zapisze informacje o przekroczeniu granicy,
-    // jezeli pierwszy wyciagniety rekord z bazy ma ten sam kod kraju to nie wysylamy tego eventu, a jak inny to wtedy tak
+
     @Override
     public List<Position> determineVehiclePosition(Truck truck) {
         final Position position = positionServicePort.determineVehiclePositions(truck);

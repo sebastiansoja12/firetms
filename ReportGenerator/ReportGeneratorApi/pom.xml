@@ -10,6 +10,8 @@
     </parent>
 
     <artifactId>ReportGeneratorApi</artifactId>
+    <packaging>jar</packaging>
+
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -20,8 +22,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 

@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,6 +44,11 @@ public class EventRepositoryImpl implements EventRepository {
         final BorderCrossing borderCrossing = new BorderCrossing(vehicleReg, events);
 
         return new ReportResponse(new Report(borderCrossing));
+    }
+
+    @Override
+    public ReportResponse findByVehicleRegAndDates(String vehicleReg, Instant dateFrom, Instant dateTo) {
+        return null;
     }
 
 }

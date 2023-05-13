@@ -8,21 +8,20 @@ import com.fire.geocoding.dto.CoordinatesDto;
 import com.fire.geocoding.dto.CountryResponseDto;
 import com.fire.position.PositionService;
 import com.fire.position.dto.PositionDto;
+import com.fire.telemetry.TelemetryProperties;
 import com.fire.updater.domain.model.PositionUpdateTransfer;
 import com.fire.updater.domain.port.secondary.PositionUpdateServicePort;
 import com.fire.updater.instrastructure.adapter.secondary.mapper.PositionMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.Instant;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-public class PositionUpdateAdapter implements PositionUpdateServicePort {
-
-    private final static String POSITION_URL = "http://localhost:8081/vehicles/coordinates";
+public class PositionUpdateAdapter extends TelemetryProperties implements PositionUpdateServicePort {
 
     private final PositionService positionService;
 
@@ -49,12 +48,12 @@ public class PositionUpdateAdapter implements PositionUpdateServicePort {
         positionService.getNewestPosition(positions);
     }
 
-    private static List<PositionUpdateTransfer> getPositionUpdateTransfers() {
+    private List<PositionUpdateTransfer> getPositionUpdateTransfers() {
         final RestTemplate restTemplate = new RestTemplate();
-        final String json = restTemplate.getForObject(POSITION_URL, String.class);
         final ObjectMapper objectMapper = new ObjectMapper();
         List<PositionUpdateTransfer> positionTransfer = new ArrayList<>();
         try {
+            final String json = restTemplate.getForObject(getUrl(), String.class);
             positionTransfer = objectMapper.readValue(json, new TypeReference<>() {});
         } catch (JsonProcessingException e) {
             e.printStackTrace();

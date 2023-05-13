@@ -1,10 +1,14 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <dataset>
 
     <truck
-            plate = "SR1234"
-            telemetry_enabled="1"
+            PLATE = "SR1234"
+            TELEMATICS="1"
     />
+    <position
+        VEHICLE_REG="SR1234"
+        />
+
 
 
 </dataset>
