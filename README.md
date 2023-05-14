@@ -29,7 +29,7 @@
   <p align="center">
     README
     <br />
-    <a href="">View Demo</a>
+    <a href="https://firetms.herokuapp.com/">View Demo</a>
     ·
     <a href="https://github.com/sebastiansoja12/firetms/issues">Report Bug</a>
     ·
