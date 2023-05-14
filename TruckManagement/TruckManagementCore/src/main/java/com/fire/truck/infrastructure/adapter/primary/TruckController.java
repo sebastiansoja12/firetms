@@ -1,7 +1,6 @@
 package com.fire.truck.infrastructure.adapter.primary;
 
 import com.fire.truck.domain.model.Truck;
-import com.fire.truck.domain.model.TruckPositionResponse;
 import com.fire.truck.domain.model.TruckRequest;
 import com.fire.truck.domain.port.primary.TruckPort;
 import com.fire.truck.dto.TruckRequestDto;
@@ -20,7 +19,7 @@ import java.util.List;
 
 @RestController
 @Controller
-@RequestMapping("/api/trucks")
+@RequestMapping("/trucks")
 @AllArgsConstructor
 public class TruckController {
 
