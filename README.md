@@ -125,7 +125,7 @@ Visit sites given in Prerequisites section to run the project.
 ## Usage
 Position by vehicle registration:
 
-<img src="FireApplication/src/main/resources/templates/firetms.png" alt="Logo" width="198" height="80">
+<img src="FireApplication/src/main/resources/templates/positions.png" alt="Logo" width="198" height="80">
   
 _For more examples, please refer to the [Documentation](https://example.com)_
 
