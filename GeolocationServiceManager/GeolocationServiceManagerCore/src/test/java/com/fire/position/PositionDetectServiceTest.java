@@ -32,7 +32,7 @@ public class PositionDetectServiceTest {
     }
 
     @Test
-    void shouldSendEvent() {
+    void shouldCreateBorderCrossingEvent() {
         // given
         final Position position = new Position();
         position.setVehicleReg("SR1234");
@@ -55,7 +55,7 @@ public class PositionDetectServiceTest {
     }
 
     @Test
-    void shouldNotSendEvent() {
+    void shouldNotCreateBorderCrossingEvent() {
         // given
         final Position position = new Position();
         position.setVehicleReg("SR1234");
@@ -74,6 +74,7 @@ public class PositionDetectServiceTest {
         positionDetectService.detectBorderCrossing(position, newPosition);
 
         // then
+        // event was not sent
         verify(positionServicePort, times(0)).createBorderCrossingEvent(position, newPosition);
     }
 }
