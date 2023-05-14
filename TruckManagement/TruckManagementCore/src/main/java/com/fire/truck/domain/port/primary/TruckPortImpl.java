@@ -19,8 +19,7 @@ public class TruckPortImpl implements TruckPort {
 
     @Override
     public void addTruck(List<TruckRequest> truckRequests) {
-        truckRequests.stream()
-                .filter(TruckRequest::isNotNull)
+        truckRequests
                 .forEach(truckService::addTruck);
     }
 
