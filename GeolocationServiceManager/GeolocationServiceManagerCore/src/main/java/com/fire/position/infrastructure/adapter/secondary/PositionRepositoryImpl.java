@@ -1,6 +1,7 @@
 package com.fire.position.infrastructure.adapter.secondary;
 
 import com.fire.position.domain.model.Position;
+import com.fire.position.domain.model.PositionRequest;
 import com.fire.position.domain.port.secondary.PositionRepository;
 import com.fire.position.infrastructure.adapter.secondary.entity.PositionEntity;
 import com.fire.position.infrastructure.adapter.secondary.exception.PositionNotFoundException;
@@ -34,12 +35,12 @@ public class PositionRepositoryImpl implements PositionRepository {
     @Override
     public Position savePosition(Position position) {
         final PositionEntity positionEntity = positionModelMapper.map(position);
+        positionEntity.setTimestamp(Instant.now());
         return positionModelMapper.map(positionReadRepository.save(positionEntity));
     }
 
     @Override
     public Optional<PositionEntity> findPositionOnPlate(String plate) {
-        final Sort sort = Sort.by(Sort.Direction.ASC, "timestamp");
         return positionReadRepository.findDistinctFirstByVehicleRegOrderByIdDesc(plate);
     }
 }

@@ -22,7 +22,7 @@ public class EventRepositoryImpl implements EventRepository {
     @Override
     public void save(Event event) {
         final EventEntity eventEntity = eventModelMapper.map(event);
-        eventReadRepository.saveAndFlush(eventEntity);
+        eventReadRepository.save(eventEntity);
     }
 
     @Override

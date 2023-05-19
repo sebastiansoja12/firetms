@@ -19,8 +19,6 @@ public class PositionAdapter implements PositionServicePort {
 
     @Override
     public void createBorderCrossingEvent(Position position, Position newPosition) {
-        final List<EventDto> events = new ArrayList<>();
-
         final EventDto event = EventDto.builder()
                 .eventTimeStamp(Instant.now())
                 .countryIn(newPosition.getCountry())
@@ -28,11 +26,9 @@ public class PositionAdapter implements PositionServicePort {
                 .vehicleReg(position.getVehicleReg())
                 .build();
 
-        events.add(event);
-
         final TruckPositionMessageDto message = TruckPositionMessageDto.builder()
                 .raportTimeStamp(Instant.now())
-                .events(events)
+                .events(List.of(event))
                 .build();
 
         sendEvent(buildEvent(message));

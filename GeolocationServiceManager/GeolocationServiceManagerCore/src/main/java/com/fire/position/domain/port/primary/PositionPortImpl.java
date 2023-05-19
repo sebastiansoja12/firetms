@@ -20,9 +20,8 @@ public class PositionPortImpl implements PositionPort {
 
 
     @Override
-    public void insertPosition(Position position) {
-        position.setTimestamp(Instant.now().toString());
-        positionRepository.savePosition(position);
+    public Position insertPosition(Position position) {
+        return positionRepository.savePosition(position);
     }
 
     @Override

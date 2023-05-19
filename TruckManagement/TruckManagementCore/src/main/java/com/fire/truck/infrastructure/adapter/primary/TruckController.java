@@ -10,6 +10,7 @@ import com.fire.truck.infrastructure.adapter.primary.mapper.TruckRequestMapperIm
 import com.fire.truck.infrastructure.adapter.primary.mapper.TruckResponseMapper;
 import com.fire.truck.infrastructure.adapter.primary.mapper.TruckResponseMapperImpl;
 import lombok.AllArgsConstructor;
+import org.intellij.lang.annotations.Pattern;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -38,7 +39,7 @@ public class TruckController {
     }
 
     @GetMapping("/{plate}")
-    public ResponseEntity<?> getTruck(@PathVariable String plate) {
+    public ResponseEntity<?> getTruck(@PathVariable @Pattern("[A-Z0-9]{6}") String plate) {
         final Truck truck =  truckPort.getTruckByPlate(plate);
         final TruckResponseDto truckResponse = truckResponseMapper.map(truck);
         return ResponseEntity.status(HttpStatus.FOUND).body(truckResponse);

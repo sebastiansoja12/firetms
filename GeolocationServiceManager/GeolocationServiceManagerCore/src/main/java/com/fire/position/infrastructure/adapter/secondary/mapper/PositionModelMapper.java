@@ -1,6 +1,7 @@
 package com.fire.position.infrastructure.adapter.secondary.mapper;
 
 import com.fire.position.domain.model.Position;
+import com.fire.position.domain.model.PositionRequest;
 import com.fire.position.infrastructure.adapter.secondary.entity.PositionEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -1,7 +1,7 @@
 package com.fire.position.domain.model;
 
-
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,17 +12,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Position {
+public class PositionRequest {
 
-    @Size(min=4, max = 6, message="Vehicle reg length should be between 4 and 6")
+    @Pattern(regexp = "[A-Z0-9]{6}", message= "Vehicle reg length should be 6 and have no special characters")
     private String vehicleReg;
 
     @NotNull
     private Coordinate coordinate;
 
-    @Size(min = 3, max = 3, message = "Country code ISO Alpha 3 must have 3 characters")
+    @Pattern(regexp = "[A-Z]{3}", message="Use iso alfa 3 codes!")
     private String country;
-
-    private String timestamp;
-
 }
