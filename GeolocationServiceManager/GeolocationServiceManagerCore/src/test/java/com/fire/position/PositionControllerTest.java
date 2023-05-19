@@ -40,7 +40,7 @@ class PositionControllerTest {
     @Test
     void shouldInsertPosition() throws Exception {
         // given
-        Position position = new Position();
+        final Position position = new Position();
         position.setVehicleReg("ABC123");
         position.setCountry("UK");
 
