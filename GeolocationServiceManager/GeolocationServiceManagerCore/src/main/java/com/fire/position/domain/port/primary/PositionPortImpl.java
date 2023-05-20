@@ -1,15 +1,21 @@
 package com.fire.position.domain.port.primary;
 
-import com.fire.position.domain.model.*;
+import com.fire.position.domain.model.Coordinate;
+import com.fire.position.domain.model.Position;
+import com.fire.position.domain.model.PositionResponse;
+import com.fire.position.domain.model.TruckPosition;
+import com.fire.position.domain.port.secondary.CalculateDistanceService;
+import com.fire.position.domain.port.secondary.InterpolationService;
 import com.fire.position.domain.port.secondary.PositionRepository;
 import com.fire.position.domain.service.PositionDetectService;
 import com.fire.position.infrastructure.adapter.secondary.entity.PositionEntity;
 import lombok.AllArgsConstructor;
 
-import java.time.Instant;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.google.common.collect.MoreCollectors.onlyElement;
 
 @AllArgsConstructor
 public class PositionPortImpl implements PositionPort {
@@ -18,48 +24,16 @@ public class PositionPortImpl implements PositionPort {
 
     private final PositionRepository positionRepository;
 
+    private final CalculateDistanceService calculateDistanceService;
+
+    private final InterpolationService interpolationService;
+
+    public static final Long MAX_DISTANCE_THRESHOLD = 10000L;
+
 
     @Override
     public Position insertPosition(Position position) {
         return positionRepository.savePosition(position);
-    }
-
-    @Override
-    public void determineNewestPosition(List<Position> positions) {
-        positions
-                .forEach(
-                    p -> {
-                        Position position = null;
-
-                        final Optional<PositionEntity> positionEntity = positionRepository
-                                .findPositionOnPlate(p.getVehicleReg());
-
-                        if (positionEntity.isEmpty()) {
-                            position = positionRepository.savePosition(p);
-                        }
-
-
-                        if (position == null) {
-                            position = positionEntity.map(this::map).orElse(p);
-                        }
-
-
-                        final Position previousPosition = position;
-
-                        final Position newPosition = positions.stream()
-                                        .filter(this::isNotNull)
-                                        .filter(e -> isVehicleRegEqual(previousPosition, e))
-                                        .findFirst()
-                                        .orElse(null);
-
-                        positionService.detectBorderCrossing(previousPosition, newPosition);
-
-                        if (positionEntity.isPresent()) {
-                            positionRepository.savePosition(newPosition);
-                        }
-
-                    }
-        );
     }
 
     @Override
@@ -70,6 +44,44 @@ public class PositionPortImpl implements PositionPort {
                 .map(this::map)
                 .toList();
         return new TruckPosition(vehicleReg, positions);
+    }
+
+    @Override
+    public void determineNewestPosition(List<Position> positions) {
+        positions.parallelStream()
+                .forEach(
+                    p -> {
+
+                        final Position previousPosition = positionRepository
+                                .findPositionOnPlate(p.getVehicleReg())
+                                .map(this::map)
+                                .orElse(p);
+
+                        final Position newPosition = positions.stream()
+                                .filter(e -> isVehicleRegEqual(previousPosition, e))
+                                .collect(onlyElement());
+
+                        if (isPositionValid(previousPosition, newPosition)) {
+                            positionService.detectBorderCrossing(previousPosition, newPosition);
+                            positionRepository.savePosition(newPosition);
+                        } else {
+                            final Position correctPosition =
+                                    interpolationService.interpolatePosition(newPosition, previousPosition);
+                            positionService.detectBorderCrossing(previousPosition, correctPosition);
+                            positionRepository.savePosition(correctPosition);
+                        }
+                    }
+        );
+    }
+
+    private boolean isPositionValid(Position position, Position newPosition) {
+        final double distance =
+                calculateDistanceService.calculateDistance(position.getCoordinate(), newPosition.getCoordinate());
+        return distance <= MAX_DISTANCE_THRESHOLD;
+    }
+
+    private boolean isCountryDetermined(Position position) {
+        return !position.getCountry().equals("NOT_DETERMINED");
     }
 
     public boolean isVehicleRegEqual(Position position, Position newPosition) {
@@ -84,9 +96,5 @@ public class PositionPortImpl implements PositionPort {
 
     private PositionResponse map(Position position) {
         return new PositionResponse(position.getCoordinate(), position.getCountry(), position.getTimestamp());
-    }
-
-    private boolean isNotNull(Position position) {
-        return Objects.nonNull(position);
     }
 }

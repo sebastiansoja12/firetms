@@ -3,8 +3,7 @@ package com.fire.position.configuration;
 import com.fire.position.PositionService;
 import com.fire.position.domain.port.primary.PositionPort;
 import com.fire.position.domain.port.primary.PositionPortImpl;
-import com.fire.position.domain.port.secondary.PositionRepository;
-import com.fire.position.domain.port.secondary.PositionServicePort;
+import com.fire.position.domain.port.secondary.*;
 import com.fire.position.domain.service.PositionDetectService;
 import com.fire.position.domain.service.PositionDetectServiceImpl;
 import com.fire.position.infrastructure.adapter.primary.PositionServiceAdapter;
@@ -30,7 +29,10 @@ public class PositionConfiguration {
     @Bean
     public PositionPort positionPort(PositionRepository positionRepository,
                                      PositionDetectService positionDetectService) {
-        return new PositionPortImpl(positionDetectService, positionRepository);
+        final CalculateDistanceService calculateDistanceService = new CalculateDistanceServiceImpl();
+        final InterpolationService interpolationService = new InterpolationServiceImpl();
+        return new PositionPortImpl(positionDetectService, positionRepository,
+                calculateDistanceService, interpolationService);
     }
 
     @Bean

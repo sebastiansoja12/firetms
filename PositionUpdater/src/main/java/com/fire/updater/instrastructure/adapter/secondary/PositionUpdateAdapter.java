@@ -7,6 +7,7 @@ import com.fire.geocoding.GeocodingService;
 import com.fire.geocoding.dto.CoordinatesDto;
 import com.fire.geocoding.dto.CountryResponseDto;
 import com.fire.position.PositionService;
+import com.fire.position.dto.CoordinateDto;
 import com.fire.position.dto.PositionDto;
 import com.fire.telemetry.TelemetryProperties;
 import com.fire.updater.configuration.PositionServiceConfiguration;
@@ -43,13 +44,16 @@ public class PositionUpdateAdapter implements PositionUpdateServicePort {
 
         final List<PositionDto> positions = positionMapper.map(positionUpdateTransferList);
 
-        positions.forEach(
-                p -> {
-                    final CountryResponseDto countryResponse = geocodingService.determineCountry(new CoordinatesDto(
-                            p.getCoordinate().getLongitude(), p.getCoordinate().getLatitude()));
-                    p.setCountry(countryResponse.getCountry());
-                }
-        );
+        positions.forEach(p -> {
+            final CountryResponseDto countryResponse = geocodingService.determineCountry(new CoordinatesDto(
+                    p.getCoordinate().getLongitude(), p.getCoordinate().getLatitude()));
+
+            if (isCountryValid(countryResponse)) {
+                p.setCountry(countryResponse.getCountry());
+            } else {
+                setFallbackPositionAndCountry(p);
+            }
+        });
         positionService.getNewestPosition(positions);
     }
 
@@ -66,6 +70,15 @@ public class PositionUpdateAdapter implements PositionUpdateServicePort {
             e.printStackTrace();
         }
         return positionTransfer;
+    }
+
+    private boolean isCountryValid(CountryResponseDto countryResponse) {
+        return countryResponse != null && !countryResponse.getCountry().equals("null");
+    }
+
+    private void setFallbackPositionAndCountry(PositionDto position) {
+        position.setCoordinate(new CoordinateDto(0.0, 0.0));
+        position.setCountry("NOT_DETERMINED");
     }
 
     private class PositionUpdaterAdapterConfiguration implements PositionServiceConfiguration {

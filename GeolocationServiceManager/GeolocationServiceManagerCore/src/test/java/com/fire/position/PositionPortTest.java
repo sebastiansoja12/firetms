@@ -6,7 +6,7 @@ import com.fire.position.domain.model.PositionResponse;
 import com.fire.position.domain.model.TruckPosition;
 import com.fire.position.domain.port.primary.PositionPort;
 import com.fire.position.domain.port.primary.PositionPortImpl;
-import com.fire.position.domain.port.secondary.PositionRepository;
+import com.fire.position.domain.port.secondary.*;
 import com.fire.position.domain.service.PositionDetectService;
 import com.fire.position.infrastructure.adapter.secondary.entity.PositionEntity;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,10 +34,17 @@ public class PositionPortTest {
     @Mock
     private PositionRepository positionRepository;
 
+    @Mock
+    private CalculateDistanceService calculateDistanceService;
+
+    @Mock
+    private InterpolationService interpolationService;
+
 
     @BeforeEach
     void setup() {
-        positionPort = new PositionPortImpl(positionDetectService, positionRepository);
+        positionPort = new PositionPortImpl(positionDetectService, positionRepository, calculateDistanceService,
+                interpolationService);
     }
 
     @Test
@@ -56,11 +63,6 @@ public class PositionPortTest {
     void shouldDetermineNewestPosition() {
         // given
         final String plate = "SR1234";
-        final Position position = new Position();
-        position.setCountry("POL");
-        position.setCoordinate(new Coordinate(50.0, 20.0));
-        position.setTimestamp("2022-05-13 21:30:00");
-        position.setVehicleReg("SR1234");
 
         // build new position of a vehicle
         final Position newPosition = buildPosition();
@@ -77,7 +79,35 @@ public class PositionPortTest {
         verify(positionDetectService, times(1)).detectBorderCrossing(
                 any(), any()
         );
-        verify(positionRepository, times(1)).savePosition(newPosition);
+        verify(positionRepository, times(1)).savePosition(any());
+    }
+
+    @Test
+    void shouldDeterminePositionUsingInterpolation() {
+        // given
+        final String plate = "SR1234";
+
+        // build new position of a vehicle
+        final Position position = new Position();
+        position.setCountry("DEU");
+        position.setCoordinate(new Coordinate(40.3256188, 18.4281651));
+        position.setTimestamp(Instant.now().toString());
+        position.setVehicleReg("SR1234");
+
+        // build to find previous position of a vehicle
+        final Optional<PositionEntity> positionEntity = buildPositionEntity();
+
+        final Position newPosition = positionEntity.map(this::map).orElse(position);
+
+        when(positionRepository.findPositionOnPlate(plate)).thenReturn(positionEntity);
+        when(calculateDistanceService.calculateDistance(position.getCoordinate(), newPosition.getCoordinate()))
+                .thenReturn(11000.0);
+        // when
+        positionPort.determineNewestPosition(List.of(position));
+
+        // then
+        verify(positionRepository, times(1)).findPositionOnPlate(plate);
+        verify(positionDetectService, times(1)).detectBorderCrossing(any(), any());
     }
 
     @Test
@@ -125,6 +155,12 @@ public class PositionPortTest {
         assertEquals(expectedTruckPosition, actualTruckPosition);
     }
 
+    private Position map(PositionEntity positionEntity) {
+        return new Position(positionEntity.getVehicleReg(),
+                new Coordinate(positionEntity.getLongitude(), positionEntity.getLatitude()),
+                positionEntity.getCountry(), positionEntity.getTimestamp().toString());
+    }
+
     private static List<PositionResponse> buildPositionsList() {
         final PositionResponse positionResponse = new PositionResponse();
         positionResponse.setCoordinate(new Coordinate(50.0, 25.0));
@@ -146,8 +182,8 @@ public class PositionPortTest {
         final PositionEntity position = new PositionEntity();
         position.setCountry("POL");
         position.setTimestamp(Instant.now());
-        position.setLongitude(50.0);
-        position.setLatitude(20.0);
+        position.setLongitude(52.3256188);
+        position.setLatitude(14.4281651);
         position.setVehicleReg("SR1234");
         return Optional.of(position);
     }
