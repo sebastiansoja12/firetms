@@ -50,26 +50,20 @@ public class PositionPortImpl implements PositionPort {
     public void determineNewestPosition(List<Position> positions) {
         positions.parallelStream()
                 .forEach(
-                    p -> {
+                    position -> {
 
                         final Position previousPosition = positionRepository
-                                .findPositionOnPlate(p.getVehicleReg())
+                                .findPositionOnPlate(position.getVehicleReg())
                                 .map(this::map)
-                                .orElse(p);
+                                .orElse(position);
 
-                        final Position newPosition = positions.stream()
-                                .filter(e -> isVehicleRegEqual(previousPosition, e))
-                                .collect(onlyElement());
-
-                        if (isPositionValid(previousPosition, newPosition)) {
-                            positionService.detectBorderCrossing(previousPosition, newPosition);
-                            positionRepository.savePosition(newPosition);
-                        } else {
-                            final Position correctPosition =
-                                    interpolationService.interpolatePosition(newPosition, previousPosition);
-                            positionService.detectBorderCrossing(previousPosition, correctPosition);
-                            positionRepository.savePosition(correctPosition);
+                        if (!isPositionValid(previousPosition, position)) {
+                            position = interpolationService.interpolatePosition(position, previousPosition);
                         }
+
+                        positionService.detectBorderCrossing(previousPosition, position);
+
+                        positionRepository.savePosition(position);
                     }
         );
     }
