@@ -9,7 +9,6 @@ import com.fire.position.infrastructure.adapter.primary.mapper.PositionRequestMa
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,19 +33,10 @@ public class PositionController {
 
     @GetMapping("/{vehicleReg}/{pageNumber}/{pageSize}")
     public ResponseEntity<?> getPositionForTruck(@PathVariable @Pattern(regexp = "[A-Z0-9]{6}") String vehicleReg,
-        @PathVariable @Valid int pageNumber, @PathVariable @Valid int pageSize) {
+             @PathVariable @Valid int pageNumber, @PathVariable @Valid int pageSize) {
         final TruckPosition truckPosition = positionPort.getVehiclePosition(vehicleReg, pageNumber, pageSize);
-        if (truckPosition.getPositions().isEmpty()) {
-            throw new EmptyTruckPositionException("No position found for the specified truck.");
-        }
         return ResponseEntity.ok().body(truckPosition);
     }
 
-}
-@ResponseStatus(HttpStatus.NOT_FOUND)
-class EmptyTruckPositionException extends RuntimeException {
-    public EmptyTruckPositionException(String message) {
-        super(message);
-    }
 }
 

@@ -64,7 +64,7 @@ public class PositionPortImpl implements PositionPort {
                                 .orElse(position);
 
                         if (!isPositionValid(previousPosition, position) && isCountryNotDetermined(position) &&
-                            reactivatedGPSTracker(previousPosition, position)) {
+                            !reactivatedGPSTracker(previousPosition, position)) {
                             position = interpolationService.interpolatePosition(position, previousPosition);
                         }
 
@@ -101,14 +101,6 @@ public class PositionPortImpl implements PositionPort {
 
     private boolean isCountryNotDetermined(Position position) {
         return position.getCountry().equals("NOT_DETERMINED");
-    }
-
-    private boolean isCountryDetermined(Position position) {
-        return !position.getCountry().equals("NOT_DETERMINED");
-    }
-
-    public boolean isVehicleRegEqual(Position position, Position newPosition) {
-        return position.getVehicleReg().equals(newPosition.getVehicleReg());
     }
 
     private Position map(PositionEntity positionEntity) {

@@ -11,8 +11,8 @@ public class Vehicle {
 
     private String vehicleReg;
     private boolean telemetryEnabled;
-    private double longitude;
     private double latitude;
+    private double longitude;
 
     private Instant timeStamp;
 }

@@ -1,5 +1,7 @@
 package com.fire.updater.configuration.mock;
 
+import com.fire.geocoding.dto.CoordinatesDto;
+import com.fire.geocoding.dto.CountryResponseDto;
 import com.fire.position.PositionService;
 import com.fire.position.dto.CoordinateDto;
 import com.fire.position.dto.PositionDto;
@@ -21,6 +23,8 @@ public class TelemetryMockConfiguration {
 
         private final MockVehiclePositionUpdater mockVehiclePositionUpdater;
 
+        private final GeocodeMockService geocodeMockService;
+
         @Override
         public void positionUpdateTransferList() {
            final List<PositionUpdateTransfer> positionUpdateTransferList = preparePositionTransfers();
@@ -30,7 +34,10 @@ public class TelemetryMockConfiguration {
 
             positions.forEach(
                     p -> {
-                        p.setCountry("MOCK");
+                        final CountryResponseDto countryResponse = geocodeMockService
+                                .determineCountry(new CoordinatesDto(p.getCoordinate().getLongitude(),
+                                        p.getCoordinate().getLatitude()));
+                        p.setCountry(countryResponse.getCountry());
                     }
             );
             positionService.getNewestPosition(positions);

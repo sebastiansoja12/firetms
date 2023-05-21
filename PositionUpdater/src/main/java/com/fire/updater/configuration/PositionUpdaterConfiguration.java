@@ -3,6 +3,7 @@ package com.fire.updater.configuration;
 import com.fire.geocoding.GeocodingService;
 import com.fire.position.PositionService;
 import com.fire.telemetry.TelemetryProperties;
+import com.fire.updater.configuration.mock.GeocodeMockService;
 import com.fire.updater.configuration.mock.MockVehiclePositionUpdater;
 import com.fire.updater.configuration.mock.TelemetryMockConfiguration;
 import com.fire.updater.domain.port.primary.PositionUpdatePort;
@@ -34,7 +35,8 @@ public class PositionUpdaterConfiguration {
     @Bean
     @ConditionalOnProperty(name="service.mock", havingValue="true")
     public PositionUpdateServicePort positionUpdateMockServicePort(PositionService positionService,
-        MockVehiclePositionUpdater mockVehiclePositionUpdater) {
-        return new TelemetryMockConfiguration.PositionUpdateMockAdapter(positionService, mockVehiclePositionUpdater);
+        MockVehiclePositionUpdater mockVehiclePositionUpdater, GeocodeMockService geocodeMockService) {
+        return new TelemetryMockConfiguration.PositionUpdateMockAdapter(positionService, mockVehiclePositionUpdater,
+                geocodeMockService);
     }
 }

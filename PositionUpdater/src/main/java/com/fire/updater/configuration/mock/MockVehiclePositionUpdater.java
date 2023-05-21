@@ -23,10 +23,10 @@ public class MockVehiclePositionUpdater {
     @PostConstruct
     public void init() {
         // Create some vehicles with initial coordinates
-        vehicles.add(new Vehicle("SR1234", true, 45.843995, 9.038434, Instant.now()));
+        vehicles.add(new Vehicle("SR1234", true, 54.851536, 24.145303, Instant.now()));
         vehicles.add(new Vehicle("SO1234", true, 51.0468548, 19.9348336, Instant.now()));
         vehicles.add(new Vehicle("SK1234", true, 52.0468548, 19.9348336, Instant.now()));
-        vehicles.add(new Vehicle("SY1234", true, 53.0468548, 19.9348336, Instant.now()));
+        vehicles.add(new Vehicle("SY1234", true, 47.270111, 15.041931, Instant.now()));
         vehicles.add(new Vehicle("SRB1234", true, 54.0468548, 19.9348336, Instant.now()));
 
         // Start a timer that updates the coordinates of each vehicle every 5 minutes
