@@ -5,12 +5,11 @@ import com.fire.position.domain.port.secondary.PositionServicePort;
 import com.fire.report.LogEventPublisher;
 import com.fire.report.dto.EventDto;
 import com.fire.report.dto.TruckPositionMessageDto;
-import com.fire.report.event.TruckPositionDetermineEvent;
+import com.fire.report.event.BorderCrossingDeterminationEvent;
 import com.fire.truck.domain.port.primary.TruckPort;
 import lombok.AllArgsConstructor;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -42,13 +41,13 @@ public class PositionAdapter implements PositionServicePort {
         truckPort.getTruckByPlate(vehicleReg);
     }
 
-    private TruckPositionDetermineEvent buildEvent(TruckPositionMessageDto message) {
-        return TruckPositionDetermineEvent.builder()
+    private BorderCrossingDeterminationEvent buildEvent(TruckPositionMessageDto message) {
+        return BorderCrossingDeterminationEvent.builder()
                 .truckPositionMessage(message)
                 .build();
     }
 
-    public void sendEvent(TruckPositionDetermineEvent event) {
+    public void sendEvent(BorderCrossingDeterminationEvent event) {
         logEventPublisher.send(event);
     }
 }

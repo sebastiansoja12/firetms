@@ -6,7 +6,7 @@ import com.fire.position.infrastructure.adapter.secondary.PositionAdapter;
 import com.fire.report.LogEventPublisher;
 import com.fire.report.dto.EventDto;
 import com.fire.report.dto.TruckPositionMessageDto;
-import com.fire.report.event.TruckPositionDetermineEvent;
+import com.fire.report.event.BorderCrossingDeterminationEvent;
 import com.fire.truck.domain.port.primary.TruckPort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,7 +60,7 @@ public class PositionServicePortTest {
                 .events(List.of(eventInformation))
                 .build();
 
-        final TruckPositionDetermineEvent event = buildEvent(message);
+        final BorderCrossingDeterminationEvent event = buildEvent(message);
 
 
         // when
@@ -71,8 +71,8 @@ public class PositionServicePortTest {
         verify(logEventPublisher, times(1)).send(any());
     }
 
-    private TruckPositionDetermineEvent buildEvent(TruckPositionMessageDto message) {
-        return TruckPositionDetermineEvent.builder()
+    private BorderCrossingDeterminationEvent buildEvent(TruckPositionMessageDto message) {
+        return BorderCrossingDeterminationEvent.builder()
                 .truckPositionMessage(message)
                 .build();
     }

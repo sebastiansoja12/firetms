@@ -11,11 +11,9 @@ import com.fire.position.domain.service.PositionDetectService;
 import com.fire.position.infrastructure.adapter.secondary.entity.PositionEntity;
 import lombok.AllArgsConstructor;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static com.google.common.collect.MoreCollectors.onlyElement;
 
 @AllArgsConstructor
 public class PositionPortImpl implements PositionPort {
@@ -29,6 +27,9 @@ public class PositionPortImpl implements PositionPort {
     private final InterpolationService interpolationService;
 
     public static final Long MAX_DISTANCE_THRESHOLD = 10000L;
+
+    private static final Duration MAX_TIME_DIFFERENCE = Duration.ofHours(1);
+
 
 
     @Override
@@ -51,8 +52,6 @@ public class PositionPortImpl implements PositionPort {
         return new TruckPosition(vehicleReg, positions);
     }
 
-    // trzeba jeszcze dac warunek, że musi byc odstep czasu odpowiedni bo jak w pojezdzie wylaczony zostanie tracker gps
-    // i potem wlacyz sie go po 2 dniach a pojazd bedzie wgl gdzies indziej to sie zle zapisze lokalizacja
     @Override
     public void determineNewestPosition(List<Position> positions) {
         positions.parallelStream()
@@ -64,7 +63,8 @@ public class PositionPortImpl implements PositionPort {
                                 .map(this::map)
                                 .orElse(position);
 
-                        if (!isPositionValid(previousPosition, position)) {
+                        if (!isPositionValid(previousPosition, position) && isCountryNotDetermined(position) &&
+                            reactivatedGPSTracker(previousPosition, position)) {
                             position = interpolationService.interpolatePosition(position, previousPosition);
                         }
 
@@ -75,10 +75,32 @@ public class PositionPortImpl implements PositionPort {
         );
     }
 
+    /**
+     * Extra method to check if difference between two timestamps is shorter
+     * than one hour when gps tracker was disconnected and did not send new positions
+     * to the system. It prevents from interpolation the new position when vehicle
+     * is much further than it was 60 minutes before.
+     * @param previousPosition
+     * @param currentPosition
+     * @return true/false
+     */
+    private boolean reactivatedGPSTracker(Position previousPosition, Position currentPosition) {
+        final Instant instantPreviousPosition = Instant.parse(previousPosition.getTimestamp());
+        final Instant instantCurrentPosition = Instant.parse(currentPosition.getTimestamp());
+
+        final Duration timeDifference = Duration.between(instantPreviousPosition, instantCurrentPosition);
+
+        return timeDifference.getSeconds() <= MAX_TIME_DIFFERENCE.getSeconds();
+    }
+
     private boolean isPositionValid(Position position, Position newPosition) {
         final double distance =
                 calculateDistanceService.calculateDistance(position.getCoordinate(), newPosition.getCoordinate());
         return distance <= MAX_DISTANCE_THRESHOLD;
+    }
+
+    private boolean isCountryNotDetermined(Position position) {
+        return position.getCountry().equals("NOT_DETERMINED");
     }
 
     private boolean isCountryDetermined(Position position) {

@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -100,8 +101,6 @@ public class PositionPortTest {
         final Position newPosition = positionEntity.map(this::map).orElse(position);
 
         when(positionRepository.findPositionOnPlate(plate)).thenReturn(positionEntity);
-        when(calculateDistanceService.calculateDistance(position.getCoordinate(), newPosition.getCoordinate()))
-                .thenReturn(11000.0);
         // when
         positionPort.determineNewestPosition(List.of(position));
 
@@ -117,7 +116,7 @@ public class PositionPortTest {
         final Position position = new Position();
         position.setCountry("POL");
         position.setCoordinate(new Coordinate(50.0, 20.0));
-        position.setTimestamp("2022-05-13 21:30:00");
+        position.setTimestamp(Instant.now().toString());
         position.setVehicleReg("SR1234");
 
         when(positionRepository.findPositionOnPlate(plate)).thenReturn(Optional.empty());
@@ -136,7 +135,7 @@ public class PositionPortTest {
     void shouldGetVehiclePosition() {
         // given
         final String plate = "SR1234";
-        final List<Position> positionEntity = List.of(buildPosition());
+        final List<Position> positionEntity = List.of(buildPositionWithoutAddingTime());
         final List<PositionResponse> positions = buildPositionsList();
         final int pageNumber = 1;
         final int pageSize = 1;
@@ -164,7 +163,7 @@ public class PositionPortTest {
     private static List<PositionResponse> buildPositionsList() {
         final PositionResponse positionResponse = new PositionResponse();
         positionResponse.setCoordinate(new Coordinate(50.0, 25.0));
-        positionResponse.setTimestamp("2022-05-13 21:30:00");
+        positionResponse.setTimestamp("2023-05-21T19:39:27.793359800Z");
         positionResponse.setCountry("DEU");
         return List.of(positionResponse);
     }
@@ -173,7 +172,16 @@ public class PositionPortTest {
         final Position position = new Position();
         position.setCountry("DEU");
         position.setCoordinate(new Coordinate(50.0, 25.0));
-        position.setTimestamp("2022-05-13 21:30:00");
+        position.setTimestamp(String.valueOf(Instant.now().plus(2L, ChronoUnit.HOURS)));
+        position.setVehicleReg("SR1234");
+        return position;
+    }
+
+    private static Position buildPositionWithoutAddingTime() {
+        final Position position = new Position();
+        position.setCountry("DEU");
+        position.setCoordinate(new Coordinate(50.0, 25.0));
+        position.setTimestamp("2023-05-21T19:39:27.793359800Z");
         position.setVehicleReg("SR1234");
         return position;
     }

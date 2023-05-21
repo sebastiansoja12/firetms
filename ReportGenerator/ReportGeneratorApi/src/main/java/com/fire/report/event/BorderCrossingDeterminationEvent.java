@@ -7,12 +7,12 @@ import lombok.Getter;
 import lombok.NonNull;
 
 @Getter
-public class TruckPositionDetermineEvent extends RouteLogBaseEvent implements LogEvent {
+public class BorderCrossingDeterminationEvent extends RouteLogBaseEvent implements LogEvent {
 
     private final TruckPositionMessageDto truckPositionMessage;
 
     @Builder
-    TruckPositionDetermineEvent(@NonNull TruckPositionMessageDto truckPositionMessage) {
+    BorderCrossingDeterminationEvent(@NonNull TruckPositionMessageDto truckPositionMessage) {
         super();
         this.truckPositionMessage = truckPositionMessage;
     }

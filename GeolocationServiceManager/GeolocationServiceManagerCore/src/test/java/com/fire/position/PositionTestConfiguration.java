@@ -2,6 +2,7 @@ package com.fire.position;
 
 import com.fire.geocoding.GeocodingService;
 import com.fire.report.LogEventPublisher;
+import com.fire.truck.domain.port.primary.TruckPort;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,4 +18,7 @@ public class PositionTestConfiguration {
 
     @MockBean
     public GeocodingService geocodingService;
+
+    @MockBean
+    public TruckPort truckPort;
 }
