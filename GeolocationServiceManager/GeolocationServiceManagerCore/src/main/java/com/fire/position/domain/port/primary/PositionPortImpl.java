@@ -10,6 +10,7 @@ import com.fire.position.domain.port.secondary.PositionRepository;
 import com.fire.position.domain.service.PositionDetectService;
 import com.fire.position.infrastructure.adapter.secondary.entity.PositionEntity;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -55,6 +56,7 @@ public class PositionPortImpl implements PositionPort {
     @Override
     public void determineNewestPosition(List<Position> positions) {
         positions.parallelStream()
+                .filter(this::filterOutAllIncorrectCoordinates)
                 .forEach(
                     position -> {
 
@@ -97,6 +99,10 @@ public class PositionPortImpl implements PositionPort {
         final double distance =
                 calculateDistanceService.calculateDistance(position.getCoordinate(), newPosition.getCoordinate());
         return distance <= MAX_DISTANCE_THRESHOLD;
+    }
+
+    private boolean filterOutAllIncorrectCoordinates(Position position) {
+        return ObjectUtils.anyNotNull(position.getCoordinate().getLatitude(), position.getCoordinate().getLongitude());
     }
 
     private boolean isCountryNotDetermined(Position position) {

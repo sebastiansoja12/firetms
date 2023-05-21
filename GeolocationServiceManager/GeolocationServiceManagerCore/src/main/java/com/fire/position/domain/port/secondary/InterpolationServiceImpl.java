@@ -17,7 +17,6 @@ public class InterpolationServiceImpl implements InterpolationService {
         final double interpolatedLongitude = previousPosition.getCoordinate().getLongitude();
         final double interpolatedLatitude = previousPosition.getCoordinate().getLatitude();
 
-
         return new Position(vehicleReg, new Coordinate(interpolatedLongitude, interpolatedLatitude),
                 previousPosition.getCountry(), currentPosition.getTimestamp());
     }
