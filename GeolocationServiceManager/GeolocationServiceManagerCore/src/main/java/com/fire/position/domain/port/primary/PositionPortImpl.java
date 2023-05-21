@@ -33,19 +33,26 @@ public class PositionPortImpl implements PositionPort {
 
     @Override
     public Position insertPosition(Position position) {
+        positionService.checkIfVehicleExists(position.getVehicleReg());
         return positionRepository.savePosition(position);
     }
 
     @Override
     public TruckPosition getVehiclePosition(String vehicleReg, int pageNumber, int pageSize) {
+
+        positionService.checkIfVehicleExists(vehicleReg);
+
         final List<PositionResponse> positions = positionRepository
                 .findPositionsByPlate(vehicleReg, pageNumber, pageSize)
                 .stream()
                 .map(this::map)
                 .toList();
+
         return new TruckPosition(vehicleReg, positions);
     }
 
+    // trzeba jeszcze dac warunek, że musi byc odstep czasu odpowiedni bo jak w pojezdzie wylaczony zostanie tracker gps
+    // i potem wlacyz sie go po 2 dniach a pojazd bedzie wgl gdzies indziej to sie zle zapisze lokalizacja
     @Override
     public void determineNewestPosition(List<Position> positions) {
         positions.parallelStream()

@@ -13,6 +13,7 @@ import com.fire.position.infrastructure.adapter.secondary.PositionReadRepository
 import com.fire.position.infrastructure.adapter.secondary.PositionRepositoryImpl;
 import com.fire.position.infrastructure.adapter.secondary.mapper.PositionModelMapper;
 import com.fire.report.LogEventPublisher;
+import com.fire.truck.domain.port.primary.TruckPort;
 import org.mapstruct.factory.Mappers;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,8 +42,8 @@ public class PositionConfiguration {
     }
 
     @Bean
-    public PositionServicePort positionServicePort(LogEventPublisher logEventPublisher) {
-        return new PositionAdapter(logEventPublisher);
+    public PositionServicePort positionServicePort(LogEventPublisher logEventPublisher, TruckPort truckPort) {
+        return new PositionAdapter(logEventPublisher, truckPort);
     }
 
     @Bean

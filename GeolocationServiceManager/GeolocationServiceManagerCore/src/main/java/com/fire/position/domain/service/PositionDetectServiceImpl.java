@@ -15,4 +15,9 @@ public class PositionDetectServiceImpl implements PositionDetectService {
             positionServicePort.createBorderCrossingEvent(position, newPosition);
         }
     }
+
+    @Override
+    public void checkIfVehicleExists(String vehicleReg) {
+        positionServicePort.checkIfVehicleExists(vehicleReg);
+    }
 }

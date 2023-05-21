@@ -6,6 +6,7 @@ import com.fire.report.LogEventPublisher;
 import com.fire.report.dto.EventDto;
 import com.fire.report.dto.TruckPositionMessageDto;
 import com.fire.report.event.TruckPositionDetermineEvent;
+import com.fire.truck.domain.port.primary.TruckPort;
 import lombok.AllArgsConstructor;
 
 import java.time.Instant;
@@ -16,6 +17,8 @@ import java.util.List;
 public class PositionAdapter implements PositionServicePort {
 
     private final LogEventPublisher logEventPublisher;
+
+    private final TruckPort truckPort;
 
     @Override
     public void createBorderCrossingEvent(Position position, Position newPosition) {
@@ -32,6 +35,11 @@ public class PositionAdapter implements PositionServicePort {
                 .build();
 
         sendEvent(buildEvent(message));
+    }
+
+    @Override
+    public void checkIfVehicleExists(String vehicleReg) {
+        truckPort.getTruckByPlate(vehicleReg);
     }
 
     private TruckPositionDetermineEvent buildEvent(TruckPositionMessageDto message) {

@@ -26,7 +26,7 @@ public class CalculateDistanceServiceTest {
 
         // when
         final double result = calculateDistanceService.calculateDistance(c1, c2);
-        // then nearest depot is KT1
+        // then
         assertThat(result).isGreaterThan(0);
     }
 

@@ -7,6 +7,7 @@ import com.fire.report.LogEventPublisher;
 import com.fire.report.dto.EventDto;
 import com.fire.report.dto.TruckPositionMessageDto;
 import com.fire.report.event.TruckPositionDetermineEvent;
+import com.fire.truck.domain.port.primary.TruckPort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,9 +27,12 @@ public class PositionServicePortTest {
     @Mock
     private LogEventPublisher logEventPublisher;
 
+    @Mock
+    private TruckPort truckPort;
+
     @BeforeEach
     void setup() {
-        positionAdapter = new PositionAdapter(logEventPublisher);
+        positionAdapter = new PositionAdapter(logEventPublisher, truckPort);
     }
 
     @Test
