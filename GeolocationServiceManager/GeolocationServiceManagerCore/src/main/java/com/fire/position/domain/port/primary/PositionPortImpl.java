@@ -65,7 +65,7 @@ public class PositionPortImpl implements PositionPort {
                                 .map(this::map)
                                 .orElse(position);
 
-                        if (!isPositionValid(previousPosition, position) && isCountryNotDetermined(position) &&
+                        if (!isPositionValid(previousPosition, position) || isCountryNotDetermined(position) ||
                             !reactivatedGPSTracker(previousPosition, position)) {
                             position = interpolationService.interpolatePosition(position, previousPosition);
                         }
